@@ -16,20 +16,17 @@ accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunc
     if (!profileId) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
     }
-    const profile = await prisma.account.findUnique( {
-        where: {account_id: Number(profileId)}
-    })
+    const profile = await prisma.account.findUnique({
+        where: { account_id: Number(profileId) },
+    });
 
     if (!profile) {
         return next(new RouterError(StatusCode.ClientErrorNotFound, "profile not found"));
     }
 
-    return res.status(StatusCode.SuccessOK).json({success: true, profile: profile});
+    return res.status(StatusCode.SuccessOK).json({ success: true, profile: profile });
 });
 
-accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunction) => {
-    
-});
-
+accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunction) => {});
 
 export default accountRouter;
