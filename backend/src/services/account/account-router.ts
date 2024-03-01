@@ -27,6 +27,18 @@ accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunc
     return res.status(StatusCode.SuccessOK).json({ success: true, profile: profile });
 });
 
-accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunction) => {});
+accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunction) => {
+    const profileId = req.query.id as string | undefined;
+
+    if (!profileId) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
+    }
+
+    const tickets = await prisma.ticket.findMany({
+        where: { owner_id: Number(profileId) },
+    });
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: tickets });
+});
 
 export default accountRouter;
