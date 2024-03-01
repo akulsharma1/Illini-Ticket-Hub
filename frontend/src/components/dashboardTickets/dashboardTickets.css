@@ -1,0 +1,56 @@
+.ticket-list {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: auto;
+    padding: 40px;
+    overflow-y: auto;
+    position: fixed;
+    left: 30%;
+    top: 5%;
+}
+
+.ticket-heading {
+    font-size: 50px;
+    margin-bottom: 30px;
+    position: relative;
+    top: -20px;
+}
+
+.ticket-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ticket-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px #13294B;
+    margin-bottom: 10px;
+    max-width: 70%;
+    height: 80px;
+    position: relative;
+}
+
+.ticket-card .event {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.ticket-card .listed,
+.ticket-card .unlisted {
+    font-size: 30px;
+    position: absolute;
+    transform: translateY(-50%);
+    right: 20px;
+}
+
+.ticket-card .listed {
+    color: green;
+}
+
+.ticket-card .unlisted {
+    color: red;
+}

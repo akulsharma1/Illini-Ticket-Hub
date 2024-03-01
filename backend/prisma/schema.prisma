@@ -2,97 +2,99 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model Event {
     event_id Int @id @default(autoincrement())
 
-    event_type String
-    away_team String
-    event_start DateTime
-    sales_enabled Boolean @default(true)
+    event_type    String
+    away_team     String
+    event_start   DateTime
+    sales_enabled Boolean  @default(true)
 
     // all tickets for the event
     tickets Ticket[]
 
     marketplace Marketplace?
 
-    
-
-    created_at      DateTime @default(now()) @db.Timestamptz(6)
+    created_at DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model Ticket {
     owner_id Int
-    event_id Int 
-    @@id([owner_id, event_id])
+    event_id Int
 
     // note: @relation in prisma is just a foreign key constraint
     owner Account @relation(fields: [owner_id], references: [account_id])
-    event Event @relation(fields: [event_id], references: [event_id])
-    
+    event Event   @relation(fields: [event_id], references: [event_id])
+
     // used flag: set to true when it has been used
     used Boolean @default(false)
 
     listed Boolean @default(false)
 
-    created_at      DateTime @default(now()) @db.Timestamptz(6)
+    created_at DateTime @default(now()) @db.Timestamptz(6)
+
+    @@id([owner_id, event_id])
 }
 
 model Account {
     // account login stuff
-    account_id Int @id @default(autoincrement())
-    google_user_id String @unique
-    email_address    String
-    name            String?
-    access_token     String
+    account_id    Int     @id @default(autoincrement())
+    // google_user_id String @unique
+    email_address String
+    password      String
+    name          String?
+    // access_token  String
 
-    tickets         Ticket[] // Define the relationship to Ticket model
+    tickets Ticket[] // Define the relationship to Ticket model
 
     asks Ask[]
     bids Bid[]
 
-    created_at      DateTime @default(now()) @db.Timestamptz(6)
+    created_at DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model Marketplace {
-    event_id Int @id
-    event     Event   @relation(fields: [event_id], references: [event_id])
+    event_id Int   @id
+    event    Event @relation(fields: [event_id], references: [event_id])
 
     asks Ask[]
     bids Bid[]
 
-    created_at      DateTime @default(now()) @db.Timestamptz(6)
+    created_at DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model Ask {
-    owner_id    Int
-    event_id    Int
-    @@id([owner_id, event_id])
+    owner_id Int
+    event_id Int
 
-    account      Account   @relation(fields: [owner_id], references: [account_id])
+    account     Account     @relation(fields: [owner_id], references: [account_id])
     marketplace Marketplace @relation(fields: [event_id], references: [event_id])
 
     price Decimal
 
-    created_at      DateTime @default(now()) @db.Timestamptz(6)
+    created_at DateTime @default(now()) @db.Timestamptz(6)
+
+    @@id([owner_id, event_id])
 }
 
 model Bid {
-    owner_id    Int
-    event_id    Int
-    @@id([owner_id, event_id])
+    owner_id Int
+    event_id Int
 
-    account      Account   @relation(fields: [owner_id], references: [account_id])
+    account     Account     @relation(fields: [owner_id], references: [account_id])
     marketplace Marketplace @relation(fields: [event_id], references: [event_id])
 
     price Decimal
 
-    created_at      DateTime @default(now()) @db.Timestamptz(6)
+    created_at DateTime @default(now()) @db.Timestamptz(6)
+
+    @@id([owner_id, event_id])
 }
