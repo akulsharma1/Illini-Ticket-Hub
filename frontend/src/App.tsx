@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Sidebar from "./components/sidebar/sidebar";
 import AccountButton from "./components/accountButton/accountButton";
 import DashboardTickets from "./components/dashboardTickets/dashboardTickets";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const MainApp: React.FC = () => {
+const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
 
   const handleAccountButtonClick = () => {};
@@ -17,4 +18,13 @@ const MainApp: React.FC = () => {
   );
 };
 
-export default MainApp;
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
+};
+export default App;
