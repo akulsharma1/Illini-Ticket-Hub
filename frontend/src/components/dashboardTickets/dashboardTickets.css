@@ -1,25 +1,47 @@
-.ticket-list {
+/* .ticket-list {
     display: flex;
     flex-direction: column;
     width: 50%;
     padding: 20px;
     overflow-y: auto;
+    left: 30%;
+    top: 30%;
+} */
+
+.ticket-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 40px;
+    overflow-y: auto;
+    position: fixed;
+    left: 30%; 
+    top: 10%;
 }
 
+
 .ticket-heading {
-    font-size: 30px;
-    margin-bottom: 20px;
+    font-size: 50px;
+    margin-bottom: 30px;
+    position: relative;
+    top: -45px; /* Adjust this value as needed */
 }
 
 .ticket-tabs {
+    position: absolute;
     border: 1px solid #E84A27;
-    padding: 10px;
+    width: 50%;
+    height: 100px;
+    padding: 0px;
     margin-bottom: 10px;
+    list-style-type: none;
 }
 
+
 .event {
-    position: absolute;
-    font-size: 15px;
+    position: relative;
+    font-size: 30px;
     left: 10%;
     top: 10%;
     width: 20%;
@@ -28,7 +50,7 @@
 
 .used {
     position: absolute;
-    font-size: 10px;
+    font-size: 30px;
     right: 10%;
     top: 10%;
     width: 10%;
@@ -38,7 +60,7 @@
 
 .unused {
     position: absolute;
-    font-size: 10px;
+    font-size: 30px;
     right: 10%;
     top: 10%;
     width: 10%;
@@ -48,7 +70,7 @@
 
 .listed {
     position: absolute;
-    font-size: 10px;
+    font-size: 30px;
     right: 10%;
     top: 20%;
     width: 10%;
@@ -58,7 +80,7 @@
 
 .unlisted {
     position: absolute;
-    font-size: 10px;
+    font-size: 30px;
     right: 10%;
     top: 20%;
     width: 10%;
