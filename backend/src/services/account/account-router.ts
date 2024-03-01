@@ -3,6 +3,7 @@ import prisma from "../../lib/db";
 import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import { NextFunction } from "express-serve-static-core";
+import { Account } from "@prisma/client";
 
 const accountRouter: Router = Router();
 
@@ -18,6 +19,11 @@ accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunc
     }
     const profile = await prisma.account.findUnique({
         where: { account_id: Number(profileId) },
+        select: {
+            account_id: true,
+            email_address: true,
+            name: true
+        }
     });
 
     if (!profile) {
@@ -38,7 +44,9 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
         where: { owner_id: Number(profileId) },
     });
 
-    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: tickets });
+    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: {
+        
+    } });
 });
 
 accountRouter.get("/tickets/test", async (req: Request, res: Response, next: NextFunction) => {
@@ -74,7 +82,21 @@ accountRouter.get("/tickets/test", async (req: Request, res: Response, next: Nex
 });
 
 accountRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
-    
+    const account: Account = req.body as Account;
+
+    try {
+        const result = await prisma.account.create({
+            data: {
+                email_address: account.email_address,
+                password: account.password,
+                name: account.name,
+            }
+        });
+    } catch (error) {
+        return next(new RouterError(StatusCode.ServerErrorInternal, "error creating account", undefined, error));
+    }
+
+    return res.status(StatusCode.SuccessOK).json({success: true, message: "created account"});
 });
 
 export default accountRouter;
