@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Sidebar from "./components/sidebar/sidebar";
+import AccountButton from "./components/accountButton/accountButton"; // Adjust the import path for AccountButton
 
-function App() {
+const MainApp: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("Dashboard");
+
+  const handleAccountButtonClick = () => {};
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="main-app">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <AccountButton onClick={handleAccountButtonClick} />
+      {}
     </div>
   );
-}
+};
 
-export default App;
+export default MainApp;
