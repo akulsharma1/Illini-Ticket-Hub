@@ -9,6 +9,17 @@ interface Ticket {
   created_at: string;
 }
 
+const TicketCard: React.FC<Ticket> = ({ event_id, used, listed }) => {
+  return (
+    <div className="ticket-card">
+      <strong className="event">Event ID: {event_id}</strong>
+      <span className={listed ? "listed" : "unlisted"}>
+        {listed ? "Listed" : "Unlisted"}
+      </span>
+    </div>
+  );
+};
+
 const DashboardTickets: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -21,19 +32,19 @@ const DashboardTickets: React.FC = () => {
           "http://localhost:5555/account/tickets/test?id=1"
         );
         if (!response.ok) {
-            console.log("error fetching data");
+          console.log("error fetching data");
           throw new Error("Failed to fetch data");
         }
         console.log("successfuly got data");
         const data = await response.json();
         console.log(data);
         const tickets: Ticket[] = data.tickets.map((ticketData: any) => ({
-            owner_id: ticketData.owner_id,
-            event_id: ticketData.event_id,
-            used: ticketData.used,
-            listed: ticketData.listed,
-            created_at: ticketData.created_at
-          }));
+          owner_id: ticketData.owner_id,
+          event_id: ticketData.event_id,
+          used: ticketData.used,
+          listed: ticketData.listed,
+          created_at: ticketData.created_at,
+        }));
         setTickets(tickets);
         console.log(tickets);
         setLoading(false);
@@ -59,19 +70,11 @@ const DashboardTickets: React.FC = () => {
   return (
     <div className="ticket-list">
       <div className="ticket-heading">Your Tickets</div>
-      {<ul className="ticket-tabs">
+      <div className="ticket-cards">
         {tickets.map((ticket, index) => (
-          <li key={index}>
-            <strong className="event">Event ID: {ticket.event_id}</strong>,{" "}
-            <strong className={ticket.used ? "used" : "unused"}>
-              {ticket.used ? "used" : "unused"}
-            </strong>{" "}
-            <strong className={ticket.listed ? "listed" : "unlisted"}>
-              {ticket.listed ? "listed" : "unlisted"}
-            </strong>{" "}
-          </li>
+          <TicketCard key={index} {...ticket} />
         ))}
-      </ul>}
+      </div>
     </div>
   );
 };
