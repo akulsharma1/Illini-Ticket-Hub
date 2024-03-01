@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "outDir": "out",
+        "removeComments": true,
+        "target": "ES6",
+        "module": "NodeNext",
+        // Module resolution
+        "baseUrl": "./src",
+        "esModuleInterop": true,
+        "moduleResolution": "NodeNext",
+        // Source Map
+        "sourceMap": true,
+        "sourceRoot": "./src"
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules/**"]
+}

@@ -1,0 +1,35 @@
+{
+    "name": "ticket-api",
+    "version": "1.0.0",
+    "description": "tmb analytics ticket api",
+    "main": "src/index.ts",
+    "scripts": {
+        "start": "ts-node src/index.ts",
+        "format:check": "yarn run prettier --check '**/*.{ts,js,cjs,json}'",
+        "format": "yarn run prettier --write '**/*.{ts,js,cjs,json}'",
+        "lint:check": "yarn run eslint src --ext .js,.jsx,.ts,.tsx",
+        "lint": "yarn run eslint src --ext .js,.jsx,.ts,.tsx --fix",
+        "build": "tsc",
+        "verify": "yarn build && yarn lint:check && yarn format:check"
+    },
+    "repository": "https://github.com/tmb-analytics/ticket-api.git",
+    "author": "Akul Sharma <akulsharma02@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "@prisma/client": "5.10.2",
+        "@types/node": "^20.11.19",
+        "express": "^4.18.3",
+        "express-serve-static-core": "^0.1.1",
+        "status-code-enum": "^1.0.0",
+        "ts-node": "^10.9.2",
+        "yarn": "^1.22.21"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^7.0.1",
+        "@typescript-eslint/parser": "^7.0.1",
+        "eslint": "^8.56.0",
+        "prettier": "^3.2.5",
+        "prisma": "^5.10.2",
+        "typescript": "^5.3.3"
+    }
+}
