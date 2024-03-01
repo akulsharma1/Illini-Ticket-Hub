@@ -43,8 +43,8 @@
 .ticket-card .unlisted {
     font-size: 30px;
     position: absolute;
-    transform: translateY(-50%); /* Center vertically */
-    right: 20px; /* Adjust right positioning */
+    transform: translateY(-50%);
+    right: 20px;
 }
 
 .ticket-card .listed {
