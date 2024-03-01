@@ -1,0 +1,16 @@
+.account-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #13294B;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .account-button:hover {
+    background-color: #E84A27;
+  }
+  
