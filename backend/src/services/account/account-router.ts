@@ -73,6 +73,8 @@ accountRouter.get("/tickets/test", async (req: Request, res: Response, next: Nex
     });
 });
 
-accountRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {});
+accountRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
+    
+});
 
 export default accountRouter;
