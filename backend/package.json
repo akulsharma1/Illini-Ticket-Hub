@@ -12,7 +12,7 @@
         "build": "tsc",
         "verify": "yarn build && yarn lint:check && yarn format:check"
     },
-    "repository": "https://github.com/tmb-analytics/ticket-api.git",
+    "repository": "https://github.com/CS222-UIUC-SP24/group-project-team-18.git",
     "author": "Akul Sharma <akulsharma02@gmail.com>",
     "license": "MIT",
     "dependencies": {
