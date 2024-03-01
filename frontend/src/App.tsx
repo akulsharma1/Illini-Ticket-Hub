@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Sidebar from "./components/sidebar/sidebar";
-import AccountButton from "./components/accountButton/accountButton"; // Adjust the import path for AccountButton
+import AccountButton from "./components/accountButton/accountButton";
+import DashboardTickets from "./components/dashboardTickets/dashboardTickets";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const MainApp: React.FC = () => {
+const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
 
   const handleAccountButtonClick = () => {};
@@ -11,9 +13,18 @@ const MainApp: React.FC = () => {
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <AccountButton onClick={handleAccountButtonClick} />
-      {}
+      <DashboardTickets />
     </div>
   );
 };
 
-export default MainApp;
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
+};
+export default App;
