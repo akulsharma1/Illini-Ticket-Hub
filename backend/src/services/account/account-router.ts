@@ -22,8 +22,8 @@ accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunc
         select: {
             account_id: true,
             email_address: true,
-            name: true
-        }
+            name: true,
+        },
     });
 
     if (!profile) {
@@ -44,9 +44,7 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
         where: { owner_id: Number(profileId) },
     });
 
-    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: {
-        
-    } });
+    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: tickets });
 });
 
 accountRouter.get("/tickets/test", async (req: Request, res: Response, next: NextFunction) => {
@@ -90,13 +88,13 @@ accountRouter.post("/create", async (req: Request, res: Response, next: NextFunc
                 email_address: account.email_address,
                 password: account.password,
                 name: account.name,
-            }
+            },
         });
     } catch (error) {
         return next(new RouterError(StatusCode.ServerErrorInternal, "error creating account", undefined, error));
     }
 
-    return res.status(StatusCode.SuccessOK).json({success: true, message: "created account"});
+    return res.status(StatusCode.SuccessOK).json({ success: true, message: "created account" });
 });
 
 export default accountRouter;
