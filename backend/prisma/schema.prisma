@@ -47,11 +47,9 @@ model Ticket {
 model Account {
     // account login stuff
     account_id Int @id @default(autoincrement())
-    // google_user_id String @unique
-    email_address    String
+    email_address    String @unique
     password String
     name            String?
-    // access_token     String
 
     tickets Ticket[] // Define the relationship to Ticket model
 
