@@ -17,8 +17,9 @@ const CreateAccount: React.FC = () => {
 
   const createAccount = () => {
     // TODO - one of us will add the backend logic for creating an account later
+    // Will need to make an entry into database
     const userData = { username };
-    navigate("/dashboard", {state: { userData } });
+    navigate("/dashboard", {state: { userData } }); // after creating an account, forward to database
   };
 
   return (
@@ -52,7 +53,7 @@ const CreateAccount: React.FC = () => {
             </div>
             <button type="button" className="create-button" onClick={createAccount}>Create Account</button>
             <div className="create-account">
-              <p>Already have an account? <Link to="/login">Sign in!</Link></p>
+              <p>Already have an account? <Link to="/login">Sign in!</Link></p> 
             </div>
           </form>
         </div>

@@ -17,8 +17,9 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = () => {
     // TODO - add backend logging in logic here
+    // Need to add error handling here, by searching in database and giving an error if not found
     const userData = { username };
-    navigate("/dashboard", {state: { userData } });
+    navigate("/dashboard", {state: { userData } }); // go to dashboard after someone logs in
   };
 
   return (
