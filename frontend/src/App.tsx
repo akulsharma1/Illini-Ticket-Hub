@@ -3,7 +3,9 @@ import Sidebar from "./components/sidebar/sidebar";
 import AccountButton from "./components/accountButton/accountButton";
 import DashboardTickets from "./components/dashboardTickets/dashboardTickets";
 import AccountView from "./components/accountView/accountView";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from './components/loginPage/LoginPage';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate} from "react-router-dom";
+
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -36,8 +38,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" />} /> {}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   );
