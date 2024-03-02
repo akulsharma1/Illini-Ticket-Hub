@@ -2,15 +2,19 @@
 
 
 Week 2 Progress:
+
   Aaron:
     - created dashboard page
     - added sidebar with dashboard, buy, sell and event tabs and account button
     - connected dashboardTickets file to the backend to display ticket cards on the dashboard
     - linked each tab in sidebar to their respective webpages
+    
   Adrian:
     - created account view page where account name and email are displayed. Added the sidebar component to the page.
     - added routing from account button on the dashboard to account page
     - added routing from logout button on account page to login page 
     - used navigator to pass account information from login page to dashboard and from dashboard to account page
   Akul:
+
   Ritam:
+  
