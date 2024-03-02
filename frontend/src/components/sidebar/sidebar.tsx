@@ -1,5 +1,6 @@
 import React from "react";
 import "./sidebar.css";
+import { Link } from "react-router-dom";
 
 interface sidebarProps {
   activeTab: string;
@@ -14,13 +15,11 @@ const sidebar: React.FC<sidebarProps> = ({ activeTab, setActiveTab }) => {
       <div className="sidebar-heading">Illini Ticket Hub</div>
       <ul className="sidebar-tabs">
         {tabs.map((tab) => (
-          <li
-            key={tab}
-            className={activeTab === tab ? "active" : ""}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </li>
+          <Link to={`/${tab.toLowerCase()}`} key={tab}>
+            <li className={activeTab === tab ? "active" : ""}>
+              <span>{tab}</span>
+            </li>
+          </Link>
         ))}
       </ul>
     </div>
