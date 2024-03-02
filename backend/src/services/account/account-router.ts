@@ -4,6 +4,8 @@ import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import { NextFunction } from "express-serve-static-core";
 import { Account } from "@prisma/client";
+import { decodeWithPrivateKey, encodeWithPublicKey } from "./account-helpers";
+import { rsaPrivateKey, rsaPublicKey } from "../../lib/rsa";
 
 const accountRouter: Router = Router();
 
@@ -82,11 +84,14 @@ accountRouter.get("/tickets/test", async (req: Request, res: Response, next: Nex
 accountRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
     const account: Account = req.body as Account;
 
+    if (!account.email_address || !account.name || !account.password) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid account creation params"));
+    }
     try {
         const result = await prisma.account.create({
             data: {
                 email_address: account.email_address,
-                password: account.password,
+                password: encodeWithPublicKey(account.password, rsaPublicKey),
                 name: account.name,
             },
         });
@@ -95,6 +100,23 @@ accountRouter.post("/create", async (req: Request, res: Response, next: NextFunc
     }
 
     return res.status(StatusCode.SuccessOK).json({ success: true, message: "created account" });
+});
+
+accountRouter.post("/sign-in", async (req: Request, res: Response, next: NextFunction) => {
+    const account: Account = req.body as Account;
+    if (!account.email_address || !account.password) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid account creation params"));
+    }
+
+    const profile = await prisma.account.findUnique({
+        where: {email_address: account.email_address},
+    });
+
+    if (decodeWithPrivateKey(profile.password, rsaPrivateKey) !== account.password) {
+        return next(new RouterError(StatusCode.ClientErrorUnprocessableEntity, "invalid password"));
+    }
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, message: "logged into account" });
 });
 
 export default accountRouter;
