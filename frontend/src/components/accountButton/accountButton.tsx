@@ -7,6 +7,7 @@ interface accountButtonProps {
 }
 
 const accountButton: React.FC<accountButtonProps> = ({ onClick }) => {
+  // link to the account view page
   return (
     <Link to="/account">
       <button className="account-button" onClick={onClick}>
