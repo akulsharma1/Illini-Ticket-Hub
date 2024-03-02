@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./dashboardTickets.css";
 
+// Ticket has values, owner_id, event_id, used, listed, and created_at
 interface Ticket {
   owner_id: number;
   event_id: number;
@@ -9,7 +10,8 @@ interface Ticket {
   created_at: string;
 }
 
-const TicketCard: React.FC<Ticket> = ({ event_id, used, listed }) => {
+// Ticket card
+const TicketCard: React.FC<Ticket> = ({ event_id, listed }) => {
   return (
     <div className="ticket-card">
       <strong className="event">Event ID: {event_id}</strong>
@@ -21,15 +23,17 @@ const TicketCard: React.FC<Ticket> = ({ event_id, used, listed }) => {
 };
 
 const DashboardTickets: React.FC = () => {
+  // States for tickets, error, and loading
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Retrieves tickets from backend and stores them in tickets, handling errors and loading
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5555/account/tickets/test?id=1"
+          "http://localhost:5555/account/tickets?id=1"
         );
         if (!response.ok) {
           console.log("error fetching data");
@@ -57,16 +61,19 @@ const DashboardTickets: React.FC = () => {
     fetchData();
   }, []);
 
+  // handle loading
   if (loading) {
     console.log("loading");
     return <div>Loading...</div>;
   }
 
+  // handle error
   if (error) {
     console.error("error found: ", error);
     return <div>Error: {error}</div>;
   }
 
+  // Render ticket list
   return (
     <div className="ticket-list">
       <div className="ticket-heading">Your Tickets</div>
