@@ -109,7 +109,7 @@ accountRouter.post("/sign-in", async (req: Request, res: Response, next: NextFun
     }
 
     const profile = await prisma.account.findUnique({
-        where: {email_address: account.email_address},
+        where: { email_address: account.email_address },
     });
 
     if (decodeWithPrivateKey(profile.password, rsaPrivateKey) !== account.password) {
