@@ -4,6 +4,7 @@ import AccountButton from "./components/accountButton/accountButton";
 import DashboardTickets from "./components/dashboardTickets/dashboardTickets";
 import AccountView from "./components/accountView/accountView";
 import LoginPage from './components/loginPage/LoginPage';
+import CreateAccount from './components/createAccount/CreateAccount'
 import { BrowserRouter as Router, Routes, Route, Link, Navigate} from "react-router-dom";
 
 
@@ -42,6 +43,8 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/create-account" element={<CreateAccount />} />
+
       </Routes>
     </Router>
   );
