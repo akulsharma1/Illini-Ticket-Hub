@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link component
 import './LoginPage.css'; // Import CSS file for styling
 
 const LoginPage: React.FC = () => {
@@ -14,10 +15,7 @@ const LoginPage: React.FC = () => {
   };
 
   const handleLogin = () => {
-    // Here you can implement your login logic, such as sending a request to your backend
-    // to verify the username and password
-    console.log("Username:", username);
-    console.log("Password:", password);
+    // TODO - add backend logging in logic hered    
   };
 
   return (
@@ -49,7 +47,9 @@ const LoginPage: React.FC = () => {
                 onChange={handlePasswordChange}
               />
             </div>
-            <button type="button" className="login-button" onClick={handleLogin}>Login</button>
+            <Link to="/dashboard"> {/* Use Link to navigate to the dashboard */}
+              <button type="button" className="login-button" onClick={handleLogin}>Login</button>
+            </Link>
           </form>
         </div>
       </div>
