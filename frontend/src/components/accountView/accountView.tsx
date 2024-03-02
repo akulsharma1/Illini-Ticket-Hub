@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./accountView.css";
+import { Link } from "react-router-dom";
 
 interface Account {
   username: string;
@@ -24,6 +25,12 @@ const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
     </div>
   );
 };
+
+const SignOutButton: React.FC = () => (
+  <Link to="/login">
+    <div className="sign-out-button">Sign Out</div>
+  </Link>
+);
 
 const AccountView: React.FC = () => {
   const [account, setAccount] = useState<Account | null>(null);
@@ -61,12 +68,7 @@ const AccountView: React.FC = () => {
 
   return (
     <>
-      <div
-        className="sign-out-button"
-        onClick={() => alert("Sign out clicked")}
-      >
-        Sign Out
-      </div>
+      <SignOutButton />
       {renderAccountDetails()}
     </>
   );
