@@ -18,11 +18,26 @@
   .sidebar-tabs {
     list-style-type: none;
     padding: 0;
+    color: white;
+    text-decoration: none;
+  }
+
+  .sidebar-tabs a {
+    text-decoration: none;
   }
   
   .sidebar-tabs li {
     cursor: pointer;
     padding: 20px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .sidebar-tabs li a {
+    display: block; 
+    padding: 20px; 
+    color: white; 
+    text-decoration: none;
   }
   
   .sidebar-tabs li:hover {
@@ -31,5 +46,9 @@
   
   .sidebar-tabs li.active {
     background-color: #13294B;
+  }
+
+  .sidebar-tabs li a:hover {
+    text-decoration: none;
   }
   
