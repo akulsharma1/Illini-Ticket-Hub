@@ -35,6 +35,7 @@ const AccountPage: React.FC = () => {
   );
 };
 
+// All of our routes and routing is setup here:
 const App = () => {
   return (
     <Router>
