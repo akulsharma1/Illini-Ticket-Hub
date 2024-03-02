@@ -1,4 +1,4 @@
-.login-container {
+.create-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,7 +19,7 @@
   }
   
   
-  .login-card {
+  .create-card {
     width: 350px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -54,7 +54,7 @@
     border: 1px solid #ccc;
   }
   
-  .login-button {
+  .create-button {
     width: 100%;
     padding: 8px;
     border: none;
@@ -64,7 +64,7 @@
     cursor: pointer;
   }
   
-  .login-button:hover {
+  .create-button:hover {
     background-color: #13294B;
   }
 
