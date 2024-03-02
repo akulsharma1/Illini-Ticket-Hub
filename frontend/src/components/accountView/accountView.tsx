@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 interface Account {
   username: string;
   email: string;
-  // Add more fields as needed
+  // Add more fields as needed in future
 }
 
 const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
@@ -21,12 +21,13 @@ const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
       <p>
         <strong>Email:</strong> {account.email}
       </p>
-      {/* Add more fields here as needed */}
+      {/* Add more fields here as needed in future*/}
     </div>
   );
 };
 
 const SignOutButton: React.FC = () => (
+  // route to the login page after signing out
   <Link to="/login">
     <div className="sign-out-button">Sign Out</div>
   </Link>
@@ -40,7 +41,7 @@ const AccountView: React.FC = () => {
     const fetchData = async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Dummy account data
+      // TODO: replace this dummy data with actual data from backend database in future
       const dummyAccount: Account = {
         username: "john_doe",
         email: "john.doe@example.com",
@@ -52,8 +53,6 @@ const AccountView: React.FC = () => {
 
     fetchData();
   }, []);
-
-  //const [activeTab, setActiveTab] = useState("Account");
 
   const renderAccountDetails = () => (
     <div className="card">
