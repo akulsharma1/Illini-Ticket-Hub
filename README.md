@@ -29,7 +29,7 @@ Week 2 Progress:
 
     - Designed and coded frontend for Create Account page, routed this to dashboard, added button to route to login page
 
-    - Made general routing changes and designed webpage workflow
+    - Made general routing changes and designed webpage workflow, made some basic webpage edits
 
   
   Akul:
