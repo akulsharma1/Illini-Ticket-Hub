@@ -4,6 +4,8 @@ import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import { NextFunction } from "express-serve-static-core";
 import { Account } from "@prisma/client";
+import { decodeWithPrivateKey, encodeWithPublicKey } from "./account-helpers";
+import { rsaPrivateKey, rsaPublicKey } from "../../lib/rsa";
 
 const accountRouter: Router = Router();
 
@@ -11,6 +13,7 @@ accountRouter.get("/test", async (_: Request, res: Response) => {
     return res.status(200).json({ success: true });
 });
 
+// GET profile details
 accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunction) => {
     const profileId = req.query.id as string | undefined;
 
@@ -33,6 +36,7 @@ accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunc
     return res.status(StatusCode.SuccessOK).json({ success: true, profile: profile });
 });
 
+// GET tickets for a given account
 accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunction) => {
     const profileId = req.query.id as string | undefined;
 
@@ -47,6 +51,7 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
     return res.status(StatusCode.SuccessOK).json({ success: true, tickets: tickets });
 });
 
+// test endpoint to get test ticket data
 accountRouter.get("/tickets/test", async (req: Request, res: Response, next: NextFunction) => {
     const profileId = req.query.id as string | undefined;
 
@@ -79,14 +84,19 @@ accountRouter.get("/tickets/test", async (req: Request, res: Response, next: Nex
     });
 });
 
+// create account
 accountRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
     const account: Account = req.body as Account;
 
+    if (!account.email_address || !account.name || !account.password) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid account creation params"));
+    }
     try {
         const result = await prisma.account.create({
             data: {
                 email_address: account.email_address,
-                password: account.password,
+                // encode password before making sql insert query
+                password: encodeWithPublicKey(account.password, rsaPublicKey),
                 name: account.name,
             },
         });
@@ -95,6 +105,25 @@ accountRouter.post("/create", async (req: Request, res: Response, next: NextFunc
     }
 
     return res.status(StatusCode.SuccessOK).json({ success: true, message: "created account" });
+});
+
+// endpoint to sign into account
+accountRouter.post("/sign-in", async (req: Request, res: Response, next: NextFunction) => {
+    const account: Account = req.body as Account;
+    if (!account.email_address || !account.password) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid account creation params"));
+    }
+
+    const profile = await prisma.account.findUnique({
+        where: { email_address: account.email_address },
+    });
+
+    // check if decoded password == inputted password
+    if (decodeWithPrivateKey(profile.password, rsaPrivateKey) !== account.password) {
+        return next(new RouterError(StatusCode.ClientErrorUnprocessableEntity, "invalid password"));
+    }
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, message: "logged into account" });
 });
 
 export default accountRouter;
