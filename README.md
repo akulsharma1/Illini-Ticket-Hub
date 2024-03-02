@@ -14,6 +14,7 @@ Week 2 Progress:
     - linked each tab in sidebar to their respective webpages
     
   Adrian:
+  
     - created account view page where account name and email are displayed. Added the sidebar component to the page.
     
     - added routing from account button on the dashboard to account page
@@ -22,7 +23,15 @@ Week 2 Progress:
     
     - used navigator to pass account information from login page to dashboard and from dashboard to account page
     
+  Ritam: 
+  
+    - Designed and coded frontend for Login page, routed this to the dashboard, added button to route to create an account
+
+    - Designed and coded frontend for Create Account page, routed this to dashboard, added button to route to login page
+
+    - Made general routing changes and designed webpage workflow
+
+  
   Akul:
 
-  Ritam:
   
