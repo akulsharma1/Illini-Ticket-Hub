@@ -32,6 +32,11 @@ Week 2 Progress:
     - Made general routing changes and designed webpage workflow, made some basic webpage edits
 
   
-  Akul:
+  Akul: 
+  
+    - remodeled sql database and wrote sample data creation scripts to streamline testing process
 
+    - added backend GET /account/profile (get profile details) and GET /account/tickets (get tickets for account)
+
+    - wrote backend flow for account creation and signin (includes password hashing)
   
