@@ -10,6 +10,7 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { setUserProfile } = useUserProfile();
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +23,8 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:5555/account/sign-in", { // fetch email and password data from backend
+      const response = await fetch("http://localhost:5555/account/sign-in", {
+        // fetch email and password data from backend
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,9 +34,10 @@ const LoginPage: React.FC = () => {
           password: password,
         }),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        console.error("Login failed:", data.error);
+      const data = await response.json(); 
+      if (!response.ok) {   // Handle wrong password
+        setErrorMessage("Wrong password. Please try again");
+        throw new Error("Wrong password");
       }
       setUserProfile(data.profile);
       navigate("/dashboard", { state: { userData: data } });
@@ -53,6 +56,8 @@ const LoginPage: React.FC = () => {
           <h2>Login</h2>
         </div>
         <div className="card-body">
+          {/* Display error message if there is one */}
+        {errorMessage && <div className="error-message">{errorMessage}</div>} 
           <form>
             <div className="form-group">
               <label htmlFor="email">Email:</label>
@@ -91,7 +96,8 @@ const LoginPage: React.FC = () => {
   );
 };
 
-const LoginPageDataStored: React.FC = () => ( // Wraps component in context
+const LoginPageDataStored: React.FC = () => (
+  // Wraps component in context
   <UserProfileProvider>
     <LoginPage />
   </UserProfileProvider>
