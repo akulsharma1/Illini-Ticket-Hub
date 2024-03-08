@@ -21,7 +21,11 @@ Week 3 Progress:
   
   Akul: 
   
-    - remode
+    - adjusted GET /account/tickets to display event data (start time, away team, etc.) instead of just event ID
+
+    - adjusted POST /account/sign-in to return sign in details necessary for frontend
+
+    - removed unnecessary test endpoints
 
 
 Week 2 Progress:
