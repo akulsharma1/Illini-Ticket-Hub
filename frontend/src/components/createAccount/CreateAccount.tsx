@@ -3,12 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'; // Import Link component f
 import './CreateAccount.css'; // Import CSS file for styling
 
 const CreateAccount: React.FC = () => {
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +18,7 @@ const CreateAccount: React.FC = () => {
   const createAccount = () => {
     // TODO - one of us will add the backend logic for creating an account later
     // Will need to make an entry into database
-    const userData = { username };
+    const userData = { email };
     navigate("/dashboard", {state: { userData } }); // after creating an account, forward to database
   };
 
@@ -34,12 +34,12 @@ const CreateAccount: React.FC = () => {
         <div className="card-body">
           <form>
             <div className="form-group">
-              <label htmlFor="username">Username:</label>
+              <label htmlFor="email">Email:</label>
               <input
                 type="text"
-                id="username"
-                value={username}
-                onChange={handleUsernameChange}
+                id="email"
+                value={email}
+                onChange={handleEmailChange}
               />
             </div>
             <div className="form-group">
