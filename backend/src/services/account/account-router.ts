@@ -3,7 +3,7 @@ import prisma from "../../lib/db";
 import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import { NextFunction } from "express-serve-static-core";
-import { Account } from "@prisma/client";
+import { Account, Ticket } from "@prisma/client";
 import { decodeWithPrivateKey, encodeWithPublicKey } from "./account-helpers";
 import { rsaPrivateKey, rsaPublicKey } from "../../lib/rsa";
 
@@ -48,7 +48,25 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
         where: { owner_id: Number(profileId) },
     });
 
-    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: tickets });
+    const ticketEventIds = tickets.map(ticket => ticket.event_id);
+
+    const events = await prisma.event.findMany({
+        where: {
+            event_id: {
+                in: ticketEventIds
+            }
+        }
+    })
+
+    const eventMap = new Map(events.map(event => [event.event_id, event]));
+
+    // Update each ticket with its corresponding event
+    const updatedTickets = tickets.map(ticket => ({
+        ...ticket,
+        event: eventMap.get(ticket.event_id)
+    }));
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: updatedTickets});
 });
 
 // test endpoint to get test ticket data
@@ -123,7 +141,15 @@ accountRouter.post("/sign-in", async (req: Request, res: Response, next: NextFun
         return next(new RouterError(StatusCode.ClientErrorUnprocessableEntity, "invalid password"));
     }
 
-    return res.status(StatusCode.SuccessOK).json({ success: true, message: "logged into account" });
+    return res.status(StatusCode.SuccessOK).json({
+        success: true,
+        message: "logged into account",
+        profile: {
+            account_id: profile.account_id,
+            email_address: profile.email_address,
+            name: profile.name,
+        },
+    });
 });
 
 export default accountRouter;
