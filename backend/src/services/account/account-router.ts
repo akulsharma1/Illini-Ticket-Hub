@@ -48,8 +48,10 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
         where: { owner_id: Number(profileId) },
     });
 
+    // map each ticket to its event id
     const ticketEventIds = tickets.map((ticket) => ticket.event_id);
 
+    // for every ticket event id, find the event details for it
     const events = await prisma.event.findMany({
         where: {
             event_id: {
@@ -58,6 +60,7 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
         },
     });
 
+    // map the event to its eventid
     const eventMap = new Map(events.map((event) => [event.event_id, event]));
 
     // Update each ticket with its corresponding event
