@@ -18,8 +18,10 @@ const CreateAccount: React.FC = () => {
   const createAccount = () => {
     // TODO - one of us will add the backend logic for creating an account later
     // Will need to make an entry into database
-    const userData = { email };
-    navigate("/dashboard", {state: { userData } }); // after creating an account, forward to database
+    const userData = { username };
+    // navigate("/dashboard", {state: { userData } }); // after creating an account, forward to database
+    // To make it easier, I decided that we should just go to login after someone creates an account
+    navigate("/login", {state: { userData } }); // direct straight to log in after creating acc
   };
 
   return (
