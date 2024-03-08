@@ -48,58 +48,25 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
         where: { owner_id: Number(profileId) },
     });
 
-    const ticketEventIds = tickets.map(ticket => ticket.event_id);
+    const ticketEventIds = tickets.map((ticket) => ticket.event_id);
 
     const events = await prisma.event.findMany({
         where: {
             event_id: {
-                in: ticketEventIds
-            }
-        }
-    })
+                in: ticketEventIds,
+            },
+        },
+    });
 
-    const eventMap = new Map(events.map(event => [event.event_id, event]));
+    const eventMap = new Map(events.map((event) => [event.event_id, event]));
 
     // Update each ticket with its corresponding event
-    const updatedTickets = tickets.map(ticket => ({
+    const updatedTickets = tickets.map((ticket) => ({
         ...ticket,
-        event: eventMap.get(ticket.event_id)
+        event: eventMap.get(ticket.event_id),
     }));
 
-    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: updatedTickets});
-});
-
-// test endpoint to get test ticket data
-accountRouter.get("/tickets/test", async (req: Request, res: Response, next: NextFunction) => {
-    const profileId = req.query.id as string | undefined;
-
-    if (!profileId) {
-        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
-    }
-
-    const tickets = await prisma.ticket.findMany({
-        where: { owner_id: Number(profileId) },
-    });
-
-    return res.status(StatusCode.SuccessOK).json({
-        success: true,
-        tickets: [
-            {
-                owner_id: Number(profileId),
-                event_id: 2,
-                used: false,
-                listed: false,
-                created_at: "2024-02-23T03:50:49.086Z",
-            },
-            {
-                owner_id: Number(profileId),
-                event_id: 3,
-                used: false,
-                listed: false,
-                created_at: "2024-02-23T03:50:49.086Z",
-            },
-        ],
-    });
+    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: updatedTickets });
 });
 
 // create account
