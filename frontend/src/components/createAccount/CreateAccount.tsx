@@ -9,7 +9,8 @@ import {
 const CreateAccount: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { setUserProfile } = useUserProfile();
+  const [name, setName] = useState<string>("");
+  // const { setUserProfile } = useUserProfile();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
 
@@ -20,6 +21,12 @@ const CreateAccount: React.FC = () => {
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+
 
   // const createAccount = () => {
   //   // TODO - one of us will add the backend logic for creating an account later
@@ -41,14 +48,16 @@ const CreateAccount: React.FC = () => {
         body: JSON.stringify({
           email_address: email,
           password: password,
+          name: name,
         }),
       });
-      const data = await response.json(); 
-      if (!response.ok) {   // Handle wrong password
+      const data = await response.json();
+      if (!response.ok) {
+        // Handle wrong password
         setErrorMessage("Failed to create. Please try again");
         throw new Error("Bad account make");
       }
-      setUserProfile(data.profile);
+      // setUserProfile(data.profile);
       navigate("/login", { state: { userData: data } });
     } catch (error) {
       console.error("Error during login:", error);
@@ -73,6 +82,15 @@ const CreateAccount: React.FC = () => {
                 id="email"
                 value={email}
                 onChange={handleEmailChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Name:</label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={handleNameChange}
               />
             </div>
             <div className="form-group">
