@@ -75,10 +75,12 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
 // create account
 accountRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
     const account: Account = req.body as Account;
+    console.log(account);
 
     if (!account.email_address || !account.name || !account.password) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid account creation params"));
     }
+
     try {
         const result = await prisma.account.create({
             data: {
