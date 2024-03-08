@@ -4,7 +4,7 @@ Week 3 Progress:
 
   Aaron:
   
-    - Connected log-in page to backend to check if the users email and password match with what's on the database, loging them in if it is
+    - Connected log-in page to backend to check if the users email and password match with what's on the database, logging them in if it is
     - Updated frontend to display "Incorrect Password" if the password is invalid
     - Added userProfile class for other components to access user data locally
     
