@@ -3,7 +3,7 @@ import prisma from "../../lib/db";
 import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import { NextFunction } from "express-serve-static-core";
-import { Account } from "@prisma/client";
+import { Account, Ticket } from "@prisma/client";
 import { decodeWithPrivateKey, encodeWithPublicKey } from "./account-helpers";
 import { rsaPrivateKey, rsaPublicKey } from "../../lib/rsa";
 
@@ -48,40 +48,28 @@ accountRouter.get("/tickets", async (req: Request, res: Response, next: NextFunc
         where: { owner_id: Number(profileId) },
     });
 
-    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: tickets });
-});
+    // map each ticket to its event id
+    const ticketEventIds = tickets.map((ticket) => ticket.event_id);
 
-// test endpoint to get test ticket data
-accountRouter.get("/tickets/test", async (req: Request, res: Response, next: NextFunction) => {
-    const profileId = req.query.id as string | undefined;
-
-    if (!profileId) {
-        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
-    }
-
-    const tickets = await prisma.ticket.findMany({
-        where: { owner_id: Number(profileId) },
+    // for every ticket event id, find the event details for it
+    const events = await prisma.event.findMany({
+        where: {
+            event_id: {
+                in: ticketEventIds,
+            },
+        },
     });
 
-    return res.status(StatusCode.SuccessOK).json({
-        success: true,
-        tickets: [
-            {
-                owner_id: Number(profileId),
-                event_id: 2,
-                used: false,
-                listed: false,
-                created_at: "2024-02-23T03:50:49.086Z",
-            },
-            {
-                owner_id: Number(profileId),
-                event_id: 3,
-                used: false,
-                listed: false,
-                created_at: "2024-02-23T03:50:49.086Z",
-            },
-        ],
-    });
+    // map the event to its eventid
+    const eventMap = new Map(events.map((event) => [event.event_id, event]));
+
+    // Update each ticket with its corresponding event
+    const updatedTickets = tickets.map((ticket) => ({
+        ...ticket,
+        event: eventMap.get(ticket.event_id),
+    }));
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, tickets: updatedTickets });
 });
 
 // create account
@@ -123,7 +111,15 @@ accountRouter.post("/sign-in", async (req: Request, res: Response, next: NextFun
         return next(new RouterError(StatusCode.ClientErrorUnprocessableEntity, "invalid password"));
     }
 
-    return res.status(StatusCode.SuccessOK).json({ success: true, message: "logged into account" });
+    return res.status(StatusCode.SuccessOK).json({
+        success: true,
+        message: "logged into account",
+        profile: {
+            account_id: profile.account_id,
+            email_address: profile.email_address,
+            name: profile.name,
+        },
+    });
 });
 
 export default accountRouter;
