@@ -12,7 +12,11 @@ Week 3 Progress:
     
   Ritam: 
   
-    - Designed
+    - Updated frontend for create account to include a name field for a new user to input their name 
+
+    - Implemented backend API calls to create account page, so that when user creates account, it actually enters to the database and creates an account
+
+    - Made general routing changes for creating account
 
   
   Akul: 
