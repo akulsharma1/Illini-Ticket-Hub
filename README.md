@@ -10,7 +10,10 @@ Week 3 Progress:
     
   Adrian:
   
-    - create
+    - updated frontend with new fields for account information such as number of active bids and date of account creation
+
+    - Added backend API calls to fetch user account data from database to display
+
     
   Ritam: 
   

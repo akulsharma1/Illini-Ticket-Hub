@@ -3,8 +3,9 @@ import "./accountView.css";
 import { Link } from "react-router-dom";
 
 interface Account {
-  username: string;
-  email: string;
+  account_id: string;
+  email_address: string;
+  name: string;
   // Add more fields as needed in future
 }
 
@@ -15,13 +16,23 @@ const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
 
   return (
     <div className="account-details">
+      {/* get the account name and email which was pulled from the backend database*/}
       <p>
-        <strong>Username:</strong> {account.username}
+        <strong>Email:</strong> {account.email_address}
       </p>
       <p>
-        <strong>Email:</strong> {account.email}
+        <strong>Name:</strong> {account.name}
       </p>
-      {/* Add more fields here as needed in future*/}
+      {/*replace this dummy data when we these fields it to the backend routing in the future*/}
+      <p>
+        <strong>Number of Active Bids:</strong> 5
+      </p>
+      <p>
+        <strong>Number of Active Asks:</strong> 3
+      </p>
+      <p>
+        <strong>Account Creation Date:</strong> 3/24/22
+      </p>
     </div>
   );
 };
@@ -37,18 +48,27 @@ const AccountView: React.FC = () => {
   const [account, setAccount] = useState<Account | null>(null);
 
   useEffect(() => {
-    // Simulate fetching data with a delay
     const fetchData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      try {
+        const response = await fetch("http://localhost:5555/account/profile", {
+          // fetch email and name from backend database
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
 
-      // TODO: replace this dummy data with actual data from backend database in future
-      const dummyAccount: Account = {
-        username: "john_doe",
-        email: "john.doe@example.com",
-        // Add more dummy data as needed
-      };
-
-      setAccount(dummyAccount);
+        const data = await response.json();
+        console.log(data);
+        const profileData: Account = data.profile;
+        setAccount(profileData); // store the pulled data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // handle any errors that might arise
+      }
     };
 
     fetchData();
