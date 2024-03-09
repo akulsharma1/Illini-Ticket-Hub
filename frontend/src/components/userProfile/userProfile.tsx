@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface UserProfile {
-  account_id: number;
+  account_id: string;
   email_address: string;
   name: string;
 }
