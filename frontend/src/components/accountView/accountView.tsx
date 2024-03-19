@@ -38,7 +38,6 @@ const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
 };
 
 const SignOutButton: React.FC = () => (
-  // route to the login page after signing out
   <Link to="/login">
     <div className="sign-out-button">Sign Out</div>
   </Link>
@@ -46,17 +45,28 @@ const SignOutButton: React.FC = () => (
 
 const AccountView: React.FC = () => {
   const [account, setAccount] = useState<Account | null>(null);
+  let profile: Account;
+  const st = localStorage.getItem("userProfile");
+  console.log("st: ", st);
 
+  if (!st) {
+    throw new Error("feafaeio");
+  } else {
+    profile = JSON.parse(st) as Account;
+  }
+  console.log("json_profile", profile);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5555/account/profile", {
-          // fetch email and name from backend database
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "http://localhost:5555/account/profile?id=" + profile.account_id,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

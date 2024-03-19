@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link component for routing
 import "./CreateAccount.css"; // Import CSS file for styling
-import {
-  UserProfileProvider,
-  useUserProfile,
-} from "../userProfile/userProfile";
 
 const CreateAccount: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
-  // const { setUserProfile } = useUserProfile();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
 
@@ -26,16 +21,6 @@ const CreateAccount: React.FC = () => {
     setName(event.target.value);
   };
 
-
-
-  // const createAccount = () => {
-  //   // TODO - one of us will add the backend logic for creating an account later
-  //   // Will need to make an entry into database
-  //   const userData = { email };
-  //   // navigate("/dashboard", {state: { userData } }); // after creating an account, forward to database
-  //   // To make it easier, I decided that we should just go to login after someone creates an account
-  //   navigate("/login", { state: { userData } }); // direct straight to log in after creating acc
-  // };
 
   const createAccount = async () => {
     try {

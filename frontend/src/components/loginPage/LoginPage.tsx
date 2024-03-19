@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link component for routing
 import "./LoginPage.css"; // Import CSS file for styling
-import {
-  UserProfileProvider,
-  useUserProfile,
-} from "../userProfile/userProfile";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { setUserProfile } = useUserProfile();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
 
@@ -34,12 +29,13 @@ const LoginPage: React.FC = () => {
           password: password,
         }),
       });
-      const data = await response.json(); 
-      if (!response.ok) {   // Handle wrong password
+      const data = await response.json();
+      if (!response.ok) {
+        // Handle wrong password
         setErrorMessage("Wrong password. Please try again");
         throw new Error("Wrong password");
       }
-      setUserProfile(data.profile);
+      localStorage.setItem('userProfile', JSON.stringify(data.profile));
       navigate("/dashboard", { state: { userData: data } });
     } catch (error) {
       console.error("Error during login:", error);
@@ -57,7 +53,7 @@ const LoginPage: React.FC = () => {
         </div>
         <div className="card-body">
           {/* Display error message if there is one */}
-        {errorMessage && <div className="error-message">{errorMessage}</div>} 
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           <form>
             <div className="form-group">
               <label htmlFor="email">Email:</label>
@@ -96,11 +92,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-const LoginPageDataStored: React.FC = () => (
-  // Wraps component in context
-  <UserProfileProvider>
-    <LoginPage />
-  </UserProfileProvider>
-);
-
-export default LoginPageDataStored;
+export default LoginPage;
