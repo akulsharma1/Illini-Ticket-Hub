@@ -7,6 +7,7 @@ import sellRouter from "./services/marketplace/sell/sell-router";
 import dashboardRouter from "./services/dashboard/dashboard-router";
 import { ErrorHandler } from "./middleware/error-handler";
 import cors from "cors";
+import transferRouter from "./services/marketplace/transfer/transfer-router";
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.use("/events/", eventRouter);
 app.use("/buy/", buyRouter);
 app.use("/sell/", sellRouter);
 app.use("/dashboard/", dashboardRouter);
+app.use("/transfer/", transferRouter);
 
 app.get("/", (_: Request, res: Response) => {
     res.end("API is working!!!");
