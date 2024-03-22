@@ -10,15 +10,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 #### Steps for development environment
 1. `yarn install`
 
-## To run server:
-```
-yarn start
-```
-
-Front end mockup:
-
-[tmb analytics front end.pdf](https://github.com/tmb-analytics/ticket-api/files/14381547/tmb.analytics.front.end.pdf)
-
 
 ## Available Scripts
 
