@@ -3,7 +3,7 @@ import prisma from "../../lib/db";
 import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import { NextFunction } from "express-serve-static-core";
-import { Account, Ticket } from "@prisma/client";
+import { Account } from "@prisma/client";
 import { decodeWithPrivateKey, encodeWithPublicKey } from "./account-helpers";
 import { rsaPrivateKey, rsaPublicKey } from "../../lib/rsa";
 
@@ -82,7 +82,7 @@ accountRouter.post("/create", async (req: Request, res: Response, next: NextFunc
     }
 
     try {
-        const result = await prisma.account.create({
+        await prisma.account.create({
             data: {
                 email_address: account.email_address,
                 // encode password before making sql insert query
