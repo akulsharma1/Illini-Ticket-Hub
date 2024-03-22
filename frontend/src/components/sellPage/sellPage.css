@@ -1,0 +1,61 @@
+.sell-page {
+    padding: 20px;
+    margin-left: 250px;
+  }
+  
+  .event-card-sell {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 10%;
+    height: 600px; /* Adjust the height as desired */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack child elements vertically */
+    justify-content: center; /* Center child elements vertically */
+  }
+  
+  .card-header {
+    background-color: #13294B;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .card-content {
+    padding: 20px;
+  }
+  
+  .card-title {
+    margin: 0;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    height: 300px;
+  }
+  
+  .button-container .buy-button,
+  .button-container .sell-button {
+    padding: 8px 12px;
+    width: 150px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .button-container .sell-button {
+    background-color: #800080;
+  }
+  
+  .button-container .buy-button:hover,
+  .button-container .sell-button:hover {
+    filter: brightness(85%);
+  }
+  

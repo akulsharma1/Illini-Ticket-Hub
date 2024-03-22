@@ -6,6 +6,7 @@ import AccountView from "./components/accountView/accountView";
 import LoginPage from "./components/loginPage/LoginPage";
 import CreateAccount from "./components/createAccount/CreateAccount";
 import BuyPage from "./components/buyPage/buyPage";
+import SellPage from "./components/sellPage/sellPage";
 import EventsView from "./components/eventsView/eventsView";
 import {
   BrowserRouter as Router,
@@ -50,6 +51,17 @@ const BuyTicketsPage: React.FC = () => {
   );
 };
 
+const SellTicketsPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("Sell");
+
+  return (
+    <div className="main-app">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <SellPage />
+    </div>
+  );
+};
+
 const EventsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Events");
 
@@ -72,6 +84,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/buy" element={<BuyTicketsPage />} />
+        <Route path="/sell" element={<SellTicketsPage />} />
         <Route path="/events" element={<EventsPage />} />
       </Routes>
     </Router>

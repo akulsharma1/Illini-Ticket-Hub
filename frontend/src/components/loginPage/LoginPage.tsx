@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
         <h1>Illini Ticket Hub</h1>
       </header>
       <div className="login-card">
-        <div className="card-header">
+        <div className="card-header-login">
           <h2>Login</h2>
         </div>
         <div className="card-body">

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./buyPage.css";
+import "./sellPage.css";
 
 interface Event {
   id: number;
@@ -8,35 +8,35 @@ interface Event {
   highestBid: number;
 }
 
-const BuyPage: React.FC = () => {
+const SellPage: React.FC = () => {
   const [event, setEvent] = useState<Event>({
     id: 1,
-    name: "Buy Illinois vs Purdue Tickets",
+    name: "Sell Illinois vs Maryland tickets",
     lowestAsk: 50,
     highestBid: 100,
   });
 
-  const handleBuyNow = () => {
+  const handleSellNow = () => {
     console.log("Buying now at lowest ask:", event.lowestAsk);
   };
 
-  const handlePlaceBid = () => {
-    console.log("Placing new bid");
+  const handlePlaceAsk = () => {
+    console.log("Placing new ask");
   };
 
   return (
-    <div className="buy-page">
-      <div className="event-card-buy">
+    <div className="sell-page">
+      <div className="event-card-sell">
         <div className="card-header">
           <h1 className="card-title">{event.name}</h1>
         </div>
         <div className="card-content">
           <div className="button-container">
-            <button className="buy-button" onClick={handleBuyNow}>
-              Buy Now at Lowest Ask: ${event.lowestAsk}
+            <button className="buy-button" onClick={handleSellNow}>
+              Sell Now at Highest Bid: ${event.highestBid}
             </button>
-            <button className="sell-button" onClick={handlePlaceBid}>
-              Place New Bid (Current Highest Bid: ${event.highestBid})
+            <button className="sell-button" onClick={handlePlaceAsk}>
+              Place New Ask (Current Lowest Ask: ${event.lowestAsk})
             </button>
           </div>
         </div>
@@ -45,4 +45,4 @@ const BuyPage: React.FC = () => {
   );
 };
 
-export default BuyPage;
+export default SellPage;
