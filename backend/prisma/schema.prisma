@@ -17,6 +17,7 @@ model Event {
     away_team     String
     event_start   DateTime
     sales_enabled Boolean  @default(true)
+    stadium_location String
 
     // all tickets for the event
     tickets Ticket[]
