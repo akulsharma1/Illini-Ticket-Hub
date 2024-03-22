@@ -11,7 +11,7 @@ interface Event {
 const BuyPage: React.FC = () => {
   const [event, setEvent] = useState<Event>({
     id: 1,
-    name: "Concert Ticket",
+    name: "Illinois vs Purdue",
     lowestAsk: 50,
     highestBid: 100, // Hardcoded example value
   });
@@ -28,16 +28,16 @@ const BuyPage: React.FC = () => {
 
   return (
     <div className="buy-page">
-      <div className="event-card">
+      <div className="event-card-buy">
         <div className="card-header">
           <h1 className="card-title">{event.name}</h1>
         </div>
         <div className="card-content">
           <div className="button-container">
-            <button onClick={handleBuyNow}>
+            <button className="buy-button" onClick={handleBuyNow}>
               Buy Now at Lowest Ask: ${event.lowestAsk}
             </button>
-            <button onClick={handlePlaceBid}>
+            <button className="sell-button" onClick={handlePlaceBid}>
               Place New Bid (Current Highest Bid: ${event.highestBid})
             </button>
           </div>

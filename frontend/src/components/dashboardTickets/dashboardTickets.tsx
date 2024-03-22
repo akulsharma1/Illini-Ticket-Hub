@@ -50,7 +50,7 @@ const DashboardTickets: React.FC = () => {
           created_at: ticketData.created_at,
         }));
         setTickets(tickets);
-        console.log(tickets);
+        // console.log(tickets);
         setLoading(false);
       } catch (error) {
         setError((error as Error).toString());

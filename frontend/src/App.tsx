@@ -6,6 +6,7 @@ import AccountView from "./components/accountView/accountView";
 import LoginPage from "./components/loginPage/LoginPage";
 import CreateAccount from "./components/createAccount/CreateAccount";
 import BuyPage from "./components/buyPage/buyPage";
+import EventsView from "./components/eventsView/eventsView";
 import {
   BrowserRouter as Router,
   Routes,
@@ -30,9 +31,6 @@ const Dashboard: React.FC = () => {
 
 const AccountPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("");
-
-  //const handleAccountButtonClick = () => {};
-
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -42,12 +40,23 @@ const AccountPage: React.FC = () => {
 };
 
 const BuyTicketsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState("Buy");
 
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <BuyPage />
+    </div>
+  );
+};
+
+const EventsPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("Events");
+
+  return (
+    <div className="main-app">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <EventsView />
     </div>
   );
 };
@@ -63,6 +72,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/buy" element={<BuyTicketsPage />} />
+        <Route path="/events" element={<EventsPage />} />
       </Routes>
     </Router>
   );

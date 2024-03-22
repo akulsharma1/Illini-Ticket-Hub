@@ -1,48 +1,64 @@
+/* buyPage.css */
+
 .buy-page {
-    padding: 20px;
-    margin-left: 250px; /* Adjust the margin according to your sidebar width */
-  }
-  
-  .event-card {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-header {
-    background-color: #007bff;
-    color: white;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  .card-content {
-    padding: 20px;
-  }
-  
-  .card-title {
-    margin: 0;
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }
-  
-  .button-container button {
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .button-container button:hover {
-    background-color: #0056b3;
-  }
-  
+  padding: 20px;
+  margin-left: 250px; /* Adjust the margin according to your sidebar width */
+}
+
+.event-card-buy {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 10%;
+}
+
+.card-header {
+  background-color: #13294B;
+  color: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-title {
+  margin: 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.button-container .buy-button {
+  padding: 8px 12px;
+  width: 150px;
+  background-color: #4CAF50; /* Green color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-container .sell-button {
+  padding: 8px 12px;
+  width: 150px;
+  background-color: #800080; /* Purple color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-container .buy-button:hover,
+.button-container .sell-button:hover {
+  /* Optional: Add hover effect if needed */
+  filter: brightness(85%); /* Reduce brightness on hover */
+}
