@@ -5,39 +5,37 @@ interface Event {
   id: number;
   name: string;
   lowestAsk: number;
-  highestBid: number; // Adding highestBid property
+  highestBid: number;
 }
 
 const BuyPage: React.FC = () => {
   const [event, setEvent] = useState<Event>({
     id: 1,
-    name: "Concert Ticket",
+    name: "Illinois vs Purdue",
     lowestAsk: 50,
-    highestBid: 100, // Hardcoded example value
+    highestBid: 100,
   });
 
   const handleBuyNow = () => {
-    // Handle Buy Now functionality
     console.log("Buying now at lowest ask:", event.lowestAsk);
   };
 
   const handlePlaceBid = () => {
-    // Handle Place Bid functionality
     console.log("Placing new bid");
   };
 
   return (
     <div className="buy-page">
-      <div className="event-card">
+      <div className="event-card-buy">
         <div className="card-header">
           <h1 className="card-title">{event.name}</h1>
         </div>
         <div className="card-content">
           <div className="button-container">
-            <button onClick={handleBuyNow}>
+            <button className="buy-button" onClick={handleBuyNow}>
               Buy Now at Lowest Ask: ${event.lowestAsk}
             </button>
-            <button onClick={handlePlaceBid}>
+            <button className="sell-button" onClick={handlePlaceBid}>
               Place New Bid (Current Highest Bid: ${event.highestBid})
             </button>
           </div>
