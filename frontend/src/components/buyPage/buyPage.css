@@ -1,3 +1,6 @@
+/* Note: If you are changing things in this file and it looks like it isn't changing, change the same part of sellPage.css and it should work.
+Will look into why this is happening later. */
+
 .buy-page {
   padding: 20px;
   margin-left: 250px;
@@ -8,6 +11,10 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-left: 10%;
+  height: 600px; 
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
 }
 
 .card-header {
@@ -27,10 +34,14 @@
   margin: 0;
 }
 
+
+/* Note: If you are changing things in this file and it looks like it isn't changing, change the same part of sellPage.css and it should work.
+Will look into why this is happening later. */
 .button-container {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
+  height: 300px;
 }
 
 .button-container .buy-button {

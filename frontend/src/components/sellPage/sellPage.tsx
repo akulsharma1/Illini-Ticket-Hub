@@ -32,10 +32,10 @@ const SellPage: React.FC = () => {
         </div>
         <div className="card-content">
           <div className="button-container">
-            <button className="sell-button" onClick={handleSellNow}>
+            <button className="buy-button" onClick={handleSellNow}>
               Sell Now at Highest Bid: ${event.highestBid}
             </button>
-            <button className="buy-button" onClick={handlePlaceAsk}>
+            <button className="sell-button" onClick={handlePlaceAsk}>
               Place New Ask (Current Lowest Ask: ${event.lowestAsk})
             </button>
           </div>
