@@ -2,6 +2,24 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### Prerequisites
+- [node](https://nodejs.org)
+- [yarn](https://yarnpkg.com/getting-started/install)
+- Note that we do NOT use npm, only yarn.
+
+#### Steps for development environment
+1. `yarn install`
+
+## To run server:
+```
+yarn start
+```
+
+Front end mockup:
+
+[tmb analytics front end.pdf](https://github.com/tmb-analytics/ticket-api/files/14381547/tmb.analytics.front.end.pdf)
+
+
 ## Available Scripts
 
 In the project directory, you can run:
