@@ -39,10 +39,10 @@ export async function checkIfNewOwnerAlreadyOwnsTicket(newOwnerId: number, event
         where: {
             owner_id_event_id: {
                 owner_id: newOwnerId,
-                event_id: eventId
-            }
-        }
-    })
+                event_id: eventId,
+            },
+        },
+    });
 
     if (!resp) return false;
 
