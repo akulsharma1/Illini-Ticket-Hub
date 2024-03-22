@@ -24,7 +24,9 @@ Week 4 Progress:
   
   Akul: 
   
-    - adju
+    - Added endpoint POST `/transfer` to transfer a given ticket between two users. Endpoint checks if the ticket can be transferred (e.g. sales are enabled, new owner doesn't already own a ticket, etc.)
+    - Added endpoints GET `/events` and GET `/events/purchase/:event_id` to return necessary info for buy and sell pages
+    - Added endpoint documentation
 
 Week 3 Progress:
 
