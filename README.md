@@ -8,7 +8,8 @@ Week 4 Progress:
     
   Adrian:
   
-    - up
+    - created buy page and added routing to it
+    - resolved some naming conflicts in the buyPage and eventsView css files that were creating unwanted dependencies
 
     
   Ritam: 
