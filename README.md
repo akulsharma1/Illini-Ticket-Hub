@@ -1,5 +1,10 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/3e23_jye)
 
+### Setup
+- View `backend/readme.md` and `frontend/readme.md` in order to set up all the code
+- Once set up, do `yarn start` in `backend` and `yarn start` in `frontend` in order to start both the backend and frontend.
+- Visit http://localhost:3000 to view the frontend. It automatically connects to the backend.
+
 Week 4 Progress:
 
   Aaron:
