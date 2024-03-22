@@ -9,6 +9,7 @@ Ticket API repository.
 #### Steps for development environment
 1. `yarn install`
 2. add `.env` to the main directory (same directory as `package.json`, `tsconfig.json`, `.gitignore`, etc.)
+3. Contact Akul in order to get `.env` data
 
 ## To run server:
 ```
