@@ -1,5 +1,25 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/3e23_jye)
 
+Week 4 Progress:
+
+  Aaron:
+  
+    - Co
+    
+  Adrian:
+  
+    - up
+
+    
+  Ritam: 
+  
+    - Coded sell page and established routing for it
+    - Made some UI changes for buy page, made some other general web page design and flow edits
+  
+  Akul: 
+  
+    - adju
+
 Week 3 Progress:
 
   Aaron:
