@@ -1,8 +1,6 @@
-/* buyPage.css */
-
 .buy-page {
   padding: 20px;
-  margin-left: 250px; /* Adjust the margin according to your sidebar width */
+  margin-left: 250px;
 }
 
 .event-card-buy {
@@ -38,7 +36,7 @@
 .button-container .buy-button {
   padding: 8px 12px;
   width: 150px;
-  background-color: #4CAF50; /* Green color */
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 5px;
@@ -49,7 +47,7 @@
 .button-container .sell-button {
   padding: 8px 12px;
   width: 150px;
-  background-color: #800080; /* Purple color */
+  background-color: #800080;
   color: white;
   border: none;
   border-radius: 5px;
@@ -59,6 +57,5 @@
 
 .button-container .buy-button:hover,
 .button-container .sell-button:hover {
-  /* Optional: Add hover effect if needed */
-  filter: brightness(85%); /* Reduce brightness on hover */
+  filter: brightness(85%);
 }

@@ -7,7 +7,6 @@ const EventsView: React.FC = () => {
     const events = [
         { id: 1, name: 'Event 1', opponent: 'Opponent 1', date: '2024-04-01' },
         { id: 2, name: 'Event 2', opponent: 'Opponent 2', date: '2024-04-15' },
-        // Add more events as needed
     ];
 
     return (

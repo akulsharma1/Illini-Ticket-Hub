@@ -5,7 +5,7 @@ interface Event {
   id: number;
   name: string;
   lowestAsk: number;
-  highestBid: number; // Adding highestBid property
+  highestBid: number;
 }
 
 const BuyPage: React.FC = () => {
@@ -13,16 +13,14 @@ const BuyPage: React.FC = () => {
     id: 1,
     name: "Illinois vs Purdue",
     lowestAsk: 50,
-    highestBid: 100, // Hardcoded example value
+    highestBid: 100,
   });
 
   const handleBuyNow = () => {
-    // Handle Buy Now functionality
     console.log("Buying now at lowest ask:", event.lowestAsk);
   };
 
   const handlePlaceBid = () => {
-    // Handle Place Bid functionality
     console.log("Placing new bid");
   };
 

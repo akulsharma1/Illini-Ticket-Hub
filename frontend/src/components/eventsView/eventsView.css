@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 5%;
 }
 
 .event-card {
@@ -31,7 +32,7 @@
 .buy-button,
 .sell-button {
     flex: 1;
-    width: 150px; /* Set the width to a fixed value (e.g., 150px) */
+    width: 150px;
 }
 
 .event-date {
