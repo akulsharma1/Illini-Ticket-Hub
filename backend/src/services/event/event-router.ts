@@ -47,8 +47,8 @@ eventRouter.get("/prices/:event_id", async (req: Request, res: Response, next: N
             event_type: true,
             away_team: true,
             event_start: true,
-            stadium_location: true
-        }
+            stadium_location: true,
+        },
     });
 
     if (!event) {
