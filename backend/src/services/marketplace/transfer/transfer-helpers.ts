@@ -33,3 +33,18 @@ export async function checkIfTransferrableTicket(ticket: Ticket): Promise<boolea
 
     return event.sales_enabled && event.event_start.getTime() < Date.now();
 }
+
+export async function checkIfNewOwnerAlreadyOwnsTicket(newOwnerId: number, eventId: number): Promise<boolean | undefined> {
+    const resp = await prisma.ticket.findUnique({
+        where: {
+            owner_id_event_id: {
+                owner_id: newOwnerId,
+                event_id: eventId
+            }
+        }
+    })
+
+    if (!resp) return false;
+
+    return true;
+}

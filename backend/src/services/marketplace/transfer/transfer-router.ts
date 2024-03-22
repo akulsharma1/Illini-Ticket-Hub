@@ -1,15 +1,15 @@
 import { Router, Request, Response } from "express";
 import { Ticket } from "@prisma/client";
-import { checkIfTransferrableTicket, transferOwnership } from "./transfer-helpers";
+import { checkIfNewOwnerAlreadyOwnsTicket, checkIfTransferrableTicket, transferOwnership } from "./transfer-helpers";
 import { TransferModel } from "./transfer-model";
 import { NextFunction } from "express-serve-static-core";
-import { RouterError } from "middleware/error-handler";
+import { RouterError } from "../../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import prisma from "../../../lib/db";
 
 const transferRouter: Router = Router();
 
-transferRouter.post("/transfer", async (req: Request, res: Response, next: NextFunction) => {
+transferRouter.post("/ticket/", async (req: Request, res: Response, next: NextFunction) => {
     const transferData: TransferModel = req.body as TransferModel;
 
     if (!transferData.event_id || !transferData.owner_id || !transferData.new_owner_id) {
@@ -29,13 +29,18 @@ transferRouter.post("/transfer", async (req: Request, res: Response, next: NextF
         return next(new RouterError(StatusCode.ClientErrorNotFound, "ticket not found"));
     }
 
-    const transferrable = checkIfTransferrableTicket(ticket);
+    const transferrable = await checkIfTransferrableTicket(ticket);
 
     if (!transferrable) {
         return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "ticket not transferrable"));
     }
 
-    const transfer = transferOwnership(ticket, transferData.new_owner_id);
+    const newOwnerOwnsTicket = await checkIfNewOwnerAlreadyOwnsTicket(transferData.new_owner_id, transferData.event_id);
+    if (newOwnerOwnsTicket) {
+        return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "new owner already owns ticket"));
+    }
+
+    const transfer = await transferOwnership(ticket, transferData.new_owner_id);
 
     if (!transfer) {
         return next(new RouterError(StatusCode.ServerErrorInternal, "error transferring ticket"));
