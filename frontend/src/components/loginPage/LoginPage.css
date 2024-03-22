@@ -12,11 +12,12 @@
     left: 0; 
     width: 100%; 
     z-index: 999; 
-    background-color: #13294B;
+    background-color: #E84A27; /* Change background color to match the login button */
     color: #fff;
     text-align: center;
     padding: 5px 0;
-  }
+}
+
   
   .login-card {
     width: 350px;
@@ -24,9 +25,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .card-header {
+  .card-header-login {
     background-color: #E84A27;
-    color: #fff;
+    color: white;
     padding: 16px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;

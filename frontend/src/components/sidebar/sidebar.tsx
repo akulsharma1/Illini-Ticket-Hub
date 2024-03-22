@@ -8,8 +8,8 @@ interface sidebarProps {
 }
 
 const sidebar: React.FC<sidebarProps> = ({ activeTab, setActiveTab }) => {
-  // const tabs = ["Dashboard", "Buy", "Sell", "Events"]; New update: we don't actually want buy and sell in sidebar
-  const tabs = ["Dashboard" , "Events"];
+  const tabs = ["Dashboard", "Buy", "Sell", "Events"]; 
+  // const tabs = ["Dashboard" , "Events"]; // New update: we don't actually want buy and sell in sidebar
 
   return (
     <div className="sidebar">
