@@ -14,8 +14,10 @@ const BuyPage: React.FC = () => {
     name: "Buy Illinois vs Purdue Tickets",
     lowestAsk: 50,
     highestBid: 100,
+    // replace this data with backend queries in the future
   });
 
+  // connect this to backend ticket transfer logic
   const handleBuyNow = () => {
     console.log("Buying now at lowest ask:", event.lowestAsk);
   };
@@ -24,6 +26,7 @@ const BuyPage: React.FC = () => {
     console.log("Placing new bid");
   };
 
+  // put the buttons inside of cards in order to make it more scalable
   return (
     <div className="buy-page">
       <div className="event-card-buy">
