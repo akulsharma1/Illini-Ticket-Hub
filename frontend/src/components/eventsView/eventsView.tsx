@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import './eventsView.css';
 
+// Event has id, type, start, opponent, and location
 interface Event {
     event_id: number;
     event_type: string;
@@ -10,8 +11,9 @@ interface Event {
     stadium_location: string;
   }
   
-
+  // Card for displaying events
   const EventCard: React.FC<Event> = ({ event_id, event_type, event_start, away_team, stadium_location }) => {
+    // Format date for displaying
     const formattedDate = event_start ? new Date(event_start).toLocaleDateString() : '';
   
     return (
@@ -37,7 +39,7 @@ const EventsView: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
   
-    // Retrieves tickets from backend and stores them in tickets, handling errors and loading
+    // Retrieves events from backend and stores them in events, handling errors and loading
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -59,7 +61,6 @@ const EventsView: React.FC = () => {
             stadium_location: eventData.stadium_location,
           }));
           setEvents(events);
-          // console.log(tickets);
           setLoading(false);
         } catch (error) {
           setError((error as Error).toString());
@@ -82,7 +83,7 @@ const EventsView: React.FC = () => {
       return <div>Error: {error}</div>;
     }
   
-    // Render ticket list
+    // Render event list
     return (
       <div className="event-container">
         <div className="event-heading">Events</div>
