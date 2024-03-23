@@ -9,7 +9,8 @@ Week 4 Progress:
 
   Aaron:
   
-    - Co
+    - Created event page, added routing to it, and connected it to backend to dynamically display events
+    - Added global access to userProfile, allowing other componenets to access account information
     
   Adrian:
   
