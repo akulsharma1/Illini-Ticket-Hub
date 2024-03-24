@@ -64,10 +64,12 @@ const SellTicketsPage: React.FC = () => {
 
 const EventsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Events");
+  const handleAccountButtonClick = () => {};
 
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <AccountButton onClick={handleAccountButtonClick}/>
       <EventsView />
     </div>
   );

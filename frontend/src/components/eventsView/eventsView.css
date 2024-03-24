@@ -2,6 +2,14 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 2%;
+}
+
+.event-heading {
+    font-size: 50px;
+    position: relative;
+    top: -20px;
+    margin-left: 30%;
     margin-top: 5%;
 }
 
@@ -33,6 +41,7 @@
 .sell-button {
     flex: 1;
     width: 150px;
+    cursor: pointer;
 }
 
 .event-date {
