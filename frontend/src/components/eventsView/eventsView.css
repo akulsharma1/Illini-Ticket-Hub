@@ -37,11 +37,20 @@
     padding: 10px;
 }
 
-.buy-button,
-.sell-button {
-    flex: 1;
+.buy-button-event,
+.sell-button-event {
     width: 150px;
+    height: 80px;
     cursor: pointer;
+    box-sizing: border-box;
+}
+
+.buy-button-event:hover,
+.sell-button-event:hover,
+.buy-button-event:focus,
+.sell-button-event:focus {
+    background-color: #ccc;
+    color: #fff;
 }
 
 .event-date {
