@@ -8,6 +8,14 @@ interface Event {
   highestBid: number;
 }
 
+interface EventInfo {
+  event_id: number;
+  event_type: string;
+  event_start: Date;
+  away_team: string;
+  stadium_location: string;
+}
+
 const SellPage: React.FC = () => {
   const [event, setEvent] = useState<Event>({
     id: 1,

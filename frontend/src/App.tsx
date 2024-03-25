@@ -69,7 +69,7 @@ const EventsPage: React.FC = () => {
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <AccountButton onClick={handleAccountButtonClick}/>
+      <AccountButton onClick={handleAccountButtonClick} />
       <EventsView />
     </div>
   );
