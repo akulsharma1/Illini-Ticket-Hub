@@ -74,12 +74,12 @@ const SellPage: React.FC = () => {
           </div>
           <div className="button-container">
             <button className="buy-button">
-              Buy Now
+              Place New Ask
               <br />
               Lowest Ask: {lowestAsk}
             </button>
             <button className="sell-button">
-              Place New Bid
+              Sell Now
               <br />
               Highest Bid: {highestBid}
             </button>
