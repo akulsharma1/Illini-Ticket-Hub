@@ -37,12 +37,6 @@ const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
   );
 };
 
-const SignOutButton: React.FC = () => (
-  <Link to="/login">
-    <div className="sign-out-button">Sign Out</div>
-  </Link>
-);
-
 const AccountView: React.FC = () => {
   const [account, setAccount] = useState<Account | null>(null);
   let profile: Account;
@@ -97,7 +91,6 @@ const AccountView: React.FC = () => {
 
   return (
     <>
-      <SignOutButton />
       {renderAccountDetails()}
     </>
   );
