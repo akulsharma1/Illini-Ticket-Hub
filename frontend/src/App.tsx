@@ -76,16 +76,17 @@ const EventsPage: React.FC = () => {
 };
 
 // All of our routes and routing is setup here:
+// buyPage and sellPage have dynamic routing based on the eventID
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} /> {}
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/create-account" element={<CreateAccount />} />
-        <Route path="/buy" element={<BuyTicketsPage />} />
+        <Route path="/buy/:eventID" element={<BuyTicketsPage />} />
         <Route path="/sell" element={<SellTicketsPage />} />
         <Route path="/events" element={<EventsPage />} />
       </Routes>

@@ -1,14 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./buyPage.css";
 
 interface Event {
-  id: number;
-  name: string;
-  lowestAsk: number;
-  highestBid: number;
-}
-
-interface EventInfo {
   event_id: number;
   event_type: string;
   event_start: Date;
@@ -17,38 +11,46 @@ interface EventInfo {
 }
 
 const BuyPage: React.FC = () => {
-  const [event, setEvent] = useState<Event>({
-    id: 1,
-    name: "Buy Illinois vs Purdue Tickets",
-    lowestAsk: 50,
-    highestBid: 100,
-    // replace this data with backend queries in the future
-  });
+  const { eventId } = useParams<{ eventId: string }>();
+  const [event, setEvent] = useState<Event | null>(null);
 
-  // connect this to backend ticket transfer logic
-  const handleBuyNow = () => {
-    console.log("Buying now at lowest ask:", event.lowestAsk);
-  };
+  useEffect(() => {
+    const storedEvent = localStorage.getItem("currEvent");
+    if (storedEvent) {
+      setEvent(JSON.parse(storedEvent));
+    } else {
+      console.error("Event not found in local storage");
+    }
+  }, []);
 
-  const handlePlaceBid = () => {
-    console.log("Placing new bid");
-  };
+  if (!event) {
+    return <div>Event not found</div>;
+  }
 
-  // put the buttons inside of cards in order to make it more scalable
+  const formattedDate = event.event_start
+    ? new Date(event.event_start).toLocaleDateString()
+    : "";
+
   return (
     <div className="buy-page">
-      <div className="event-card-buy">
-        <div className="card-header">
-          <h1 className="card-title">{event.name}</h1>
+      <div className="container">
+        <div className="event-card-buy">
+          <div className="card-header">
+            <h1 className="card-title">{event.event_type}</h1>
+          </div>
+          <div className="card-content">
+            <p>Away Team: {event.away_team}</p>
+            <p>Stadium: {event.stadium_location}</p>
+            <p>Event Start: {formattedDate}</p>
+          </div>
         </div>
-        <div className="card-content">
+        <div className="action-card">
+          <div className="card-header">
+            <h2 className="card-title">Actions</h2>
+          </div>
           <div className="button-container">
-            <button className="buy-button" onClick={handleBuyNow}>
-              Buy Now at Lowest Ask: ${event.lowestAsk}
-            </button>
-            <button className="sell-button" onClick={handlePlaceBid}>
-              Place New Bid (Current Highest Bid: ${event.highestBid})
-            </button>
+            <button className="buy-button">Buy Now</button>
+            <button className="sell-button">Place New Bid</button>
           </div>
         </div>
       </div>
