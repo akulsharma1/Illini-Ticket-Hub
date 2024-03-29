@@ -16,7 +16,9 @@
 .event-card {
     width: calc(85% - 30%);
     max-width: calc(100% - 30%);
+    height: 200px;
     margin-left: 30%;
+    margin-top: 1%;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -28,6 +30,31 @@
 .event-details {
     padding: 10px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.event-details h3 {
+    font-size: larger;
+    margin: 10px 0;
+}
+.event-details p {
+    margin: 5px 0;
+    font-size:small;
+}
+
+
+.event-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-image {
+    width: 60%; 
+    height: auto;
+    border-radius: 5px;
 }
 
 .event-actions {
@@ -53,6 +80,3 @@
     color: #fff;
 }
 
-.event-date {
-    padding: 10px;
-}
