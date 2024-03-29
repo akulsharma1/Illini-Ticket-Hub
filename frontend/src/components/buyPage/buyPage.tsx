@@ -13,11 +13,35 @@ interface Event {
 const BuyPage: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const [event, setEvent] = useState<Event | null>(null);
+  const [lowestAsk, setLowestAsk] = useState<number>(-1);
+  const [highestBid, setHighestBid] = useState<number>(-1);
 
   useEffect(() => {
+    const fetchData = async (eventId: number) => {
+      try {
+        // Fetch event details, lowest ask, and highest bid
+        const eventResponse = await fetch(
+          `http://localhost:5555/events/prices/${eventId}`
+        );
+        if (!eventResponse.ok) {
+          throw new Error("Failed to fetch event data");
+        }
+        const eventData = await eventResponse.json();
+        setEvent(eventData.event);
+        setLowestAsk(eventData.lowest_ask);
+        setHighestBid(eventData.highest_bid);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     const storedEvent = localStorage.getItem("currEvent");
     if (storedEvent) {
-      setEvent(JSON.parse(storedEvent));
+      const storedEventData = JSON.parse(storedEvent);
+      setEvent(storedEventData);
+      // Retrieve event ID from stored event data
+      const eventId = storedEventData.event_id;
+      fetchData(eventId);
     } else {
       console.error("Event not found in local storage");
     }
@@ -49,8 +73,16 @@ const BuyPage: React.FC = () => {
             <h2 className="card-title">Actions</h2>
           </div>
           <div className="button-container">
-            <button className="buy-button">Buy Now</button>
-            <button className="sell-button">Place New Bid</button>
+            <button className="buy-button">
+              Buy Now
+              <br />
+              Lowest Ask: {lowestAsk}
+            </button>
+            <button className="sell-button">
+              Place New Bid
+              <br />
+              Highest Bid: {highestBid}
+            </button>
           </div>
         </div>
       </div>
