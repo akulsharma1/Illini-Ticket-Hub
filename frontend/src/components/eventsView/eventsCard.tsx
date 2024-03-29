@@ -20,7 +20,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     : "";
 
   const handleClick = () => {
-    localStorage.setItem('currEvent', JSON.stringify(event));
+    localStorage.setItem("currEvent", JSON.stringify(event));
   };
 
   return (
@@ -33,11 +33,13 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
           <p className="event-date">Date: {formattedDate}</p>
         </div>
         <div className="event-actions">
-          <Link to="/buy">
+          {/* Updated Link component to pass event ID as a URL parameter */}
+          <Link to={`/buy/${event.event_id}`}>
             <button className="buy-button-event" onClick={handleClick}>
               Buy
             </button>
           </Link>
+          {/* Updated Link component to pass event ID as a URL parameter */}
           <Link to="/sell">
             <button className="sell-button-event" onClick={handleClick}>
               Sell
