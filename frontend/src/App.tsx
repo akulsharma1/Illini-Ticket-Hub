@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Sidebar from "./components/sidebar/sidebar";
-// import AccountButton from "./components/accountButton/accountButton";
 import DashboardTickets from "./components/dashboardTickets/dashboardTickets";
 import AccountView from "./components/accountView/accountView";
 import LoginPage from "./components/loginPage/LoginPage";
@@ -8,6 +7,7 @@ import CreateAccount from "./components/createAccount/CreateAccount";
 import BuyPage from "./components/buyPage/buyPage";
 import SellPage from "./components/sellPage/sellPage";
 import EventsView from "./components/eventsView/eventsView";
+import SignOutButton from "./components/signOutButton/signOutButton";
 import {
   BrowserRouter as Router,
   Routes,
@@ -19,12 +19,10 @@ import {
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
 
-  // const handleAccountButtonClick = () => {};
-
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      {/* <AccountButton onClick={handleAccountButtonClick} /> */}
+      <SignOutButton/>
       <DashboardTickets />
     </div>
   );
@@ -34,6 +32,7 @@ const AccountPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("");
   return (
     <div className="main-app">
+      <SignOutButton/>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <AccountView />
     </div>
@@ -45,6 +44,7 @@ const BuyTicketsPage: React.FC = () => {
 
   return (
     <div className="main-app">
+      <SignOutButton/>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <BuyPage />
     </div>
@@ -56,6 +56,7 @@ const SellTicketsPage: React.FC = () => {
 
   return (
     <div className="main-app">
+      <SignOutButton/>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SellPage />
     </div>
@@ -64,12 +65,11 @@ const SellTicketsPage: React.FC = () => {
 
 const EventsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Events");
-  // const handleAccountButtonClick = () => {};
 
   return (
     <div className="main-app">
+      <SignOutButton/>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      {/* <AccountButton onClick={handleAccountButtonClick} /> */}
       <EventsView />
     </div>
   );
