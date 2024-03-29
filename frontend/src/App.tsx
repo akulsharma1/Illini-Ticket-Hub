@@ -87,7 +87,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/buy/:eventID" element={<BuyTicketsPage />} />
-        <Route path="/sell" element={<SellTicketsPage />} />
+        <Route path="/sell/:eventID" element={<SellTicketsPage/>}/>
         <Route path="/events" element={<EventsPage />} />
       </Routes>
     </Router>
