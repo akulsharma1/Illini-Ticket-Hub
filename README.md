@@ -9,7 +9,9 @@ Week 5 Progress:
 
   Aaron:
   
-    - C
+    - Added images to eventsView page to help with aesthetics
+    - Added sign-out button to all pages
+    - fixed various small UI issues for better viewing experience
     
   Adrian:
   
