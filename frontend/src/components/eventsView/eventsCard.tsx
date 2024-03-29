@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./eventsView.css";
+import eventImage from "./images/StateFarmCenter.png";
 
 interface Event {
   event_id: number;
@@ -24,28 +25,27 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
   };
 
   return (
-    <div className="events-container">
-      <div key={event.event_id} className="event-card">
-        <div className="event-details">
-          <h3>{event.event_type}</h3>
-          <p>Illinois VS {event.away_team}</p>
-          <p>Stadium: {event.stadium_location}</p>
-          <p className="event-date">Date: {formattedDate}</p>
-        </div>
-        <div className="event-actions">
-          {/* Updated Link component to pass event ID as a URL parameter */}
-          <Link to={`/buy/${event.event_id}`}>
-            <button className="buy-button-event" onClick={handleClick}>
-              Buy
-            </button>
-          </Link>
-          {/* Updated Link component to pass event ID as a URL parameter */}
-          <Link to="/sell">
-            <button className="sell-button-event" onClick={handleClick}>
-              Sell
-            </button>
-          </Link>
-        </div>
+    <div className="event-card">
+      <div className="event-details">
+        <h3>{event.event_type}</h3>
+        <p>Illinois VS {event.away_team}</p>
+        <p>Stadium: {event.stadium_location}</p>
+        <p className="event-date">Date: {formattedDate}</p>
+      </div>
+      <div className="event-image-container">
+        <img src={eventImage} alt="Event Image" className="event-image"/>
+      </div>
+      <div className="event-actions">
+        <Link to={`/buy/${event.event_id}`}>
+          <button className="buy-button-event" onClick={handleClick}>
+            Buy
+          </button>
+        </Link>
+        <Link to="/sell">
+          <button className="sell-button-event" onClick={handleClick}>
+            Sell
+          </button>
+        </Link>
       </div>
     </div>
   );
