@@ -41,7 +41,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
             Buy
           </button>
         </Link>
-        <Link to="/sell">
+        <Link to={`/sell/${event.event_id}`}>
           <button className="sell-button-event" onClick={handleClick}>
             Sell
           </button>
