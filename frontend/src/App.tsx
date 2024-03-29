@@ -22,17 +22,17 @@ const Dashboard: React.FC = () => {
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <SignOutButton/>
+      <SignOutButton />
       <DashboardTickets />
     </div>
   );
 };
 
 const AccountPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState("Account");
   return (
     <div className="main-app">
-      <SignOutButton/>
+      <SignOutButton />
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <AccountView />
     </div>
@@ -44,7 +44,7 @@ const BuyTicketsPage: React.FC = () => {
 
   return (
     <div className="main-app">
-      <SignOutButton/>
+      <SignOutButton />
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <BuyPage />
     </div>
@@ -56,7 +56,7 @@ const SellTicketsPage: React.FC = () => {
 
   return (
     <div className="main-app">
-      <SignOutButton/>
+      <SignOutButton />
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <SellPage />
     </div>
@@ -68,7 +68,7 @@ const EventsPage: React.FC = () => {
 
   return (
     <div className="main-app">
-      <SignOutButton/>
+      <SignOutButton />
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <EventsView />
     </div>
