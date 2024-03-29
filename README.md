@@ -23,6 +23,7 @@ Week 5 Progress:
     - Removed buy and sell page from the sidebar, and added account page to the sidebar
     - Made specific unique sell pages for each event, pulling from localstorage from the event card to guide to which event to sell
     - Added routing to specific event sell pages from the event card in the events tab
+    - Made some light frontend changes for user experience and made buy/sell pages look better
 
   
   Akul: 
