@@ -5,6 +5,29 @@
 - Once set up, do `yarn start` in `backend` and `yarn start` in `frontend` in order to start both the backend and frontend.
 - Visit http://localhost:3000 to view the frontend. It automatically connects to the backend.
 
+Week 5 Progress:
+
+  Aaron:
+  
+    - C
+    
+  Adrian:
+  
+    - c
+
+    
+  Ritam: 
+  
+    - Removed buy and sell page from the sidebar, and added account page to the sidebar
+    - Made specific unique sell pages for each event, pulling from localstorage from the event card to guide to which event to sell
+    - Added routing to specific event sell pages from the event card in the events tab
+
+  
+  Akul: 
+  
+    - A
+
+
 Week 4 Progress:
 
   Aaron:
