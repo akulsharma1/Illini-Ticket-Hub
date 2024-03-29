@@ -60,7 +60,8 @@ const SellPage: React.FC = () => {
       <div className="container">
         <div className="event-card-sell">
           <div className="card-header">
-            <h1 className="card-title">{event.event_type}</h1>
+            {/* <h1 className="card-title">{event.event_type}</h1> */}
+            <h1 className="card-title">{`${event.event_type} - Sell`}</h1>
           </div>
           <div className="card-content">
             <p>Away Team: {event.away_team}</p>
@@ -70,7 +71,7 @@ const SellPage: React.FC = () => {
         </div>
         <div className="action-card">
           <div className="card-header">
-            <h2 className="card-title">Actions</h2>
+            <h2 className="card-title">Sell</h2>
           </div>
           <div className="button-container">
             <button className="buy-button">
