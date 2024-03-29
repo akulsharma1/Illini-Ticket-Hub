@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "./components/sidebar/sidebar";
-import AccountButton from "./components/accountButton/accountButton";
+// import AccountButton from "./components/accountButton/accountButton";
 import DashboardTickets from "./components/dashboardTickets/dashboardTickets";
 import AccountView from "./components/accountView/accountView";
 import LoginPage from "./components/loginPage/LoginPage";
@@ -19,12 +19,12 @@ import {
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
 
-  const handleAccountButtonClick = () => {};
+  // const handleAccountButtonClick = () => {};
 
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <AccountButton onClick={handleAccountButtonClick} />
+      {/* <AccountButton onClick={handleAccountButtonClick} /> */}
       <DashboardTickets />
     </div>
   );
@@ -64,12 +64,12 @@ const SellTicketsPage: React.FC = () => {
 
 const EventsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Events");
-  const handleAccountButtonClick = () => {};
+  // const handleAccountButtonClick = () => {};
 
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <AccountButton onClick={handleAccountButtonClick} />
+      {/* <AccountButton onClick={handleAccountButtonClick} /> */}
       <EventsView />
     </div>
   );
