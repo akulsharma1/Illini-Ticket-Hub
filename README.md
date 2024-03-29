@@ -13,7 +13,9 @@ Week 5 Progress:
     
   Adrian:
   
-    - c
+    - added dynamic routing to the buy page so that each event has its own page
+    - retrieved event specific data from local store within each buy page to display the relevant information
+    - connected backend in buy page to fetch the highest bid and lowest ask from backend
 
     
   Ritam: 
