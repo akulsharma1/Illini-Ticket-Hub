@@ -2,12 +2,12 @@ import express, { Application } from "express";
 import { Request, Response } from "express";
 import accountRouter from "./services/account/account-router";
 import eventRouter from "./services/event/event-router";
-import buyRouter from "./services/marketplace/buy/buy-router";
-import sellRouter from "./services/marketplace/sell/sell-router";
 import dashboardRouter from "./services/dashboard/dashboard-router";
 import { ErrorHandler } from "./middleware/error-handler";
 import cors from "cors";
 import transferRouter from "./services/marketplace/transfer/transfer-router";
+import bidRouter from "./services/marketplace/bid/bid-router";
+import askRouter from "./services/marketplace/ask/ask-router";
 
 const app: Application = express();
 
@@ -16,8 +16,8 @@ app.use(cors());
 
 app.use("/account/", accountRouter);
 app.use("/events/", eventRouter);
-app.use("/buy/", buyRouter);
-app.use("/sell/", sellRouter);
+app.use("/bids/", bidRouter);
+app.use("/asks/", askRouter);
 app.use("/dashboard/", dashboardRouter);
 app.use("/transfer/", transferRouter);
 

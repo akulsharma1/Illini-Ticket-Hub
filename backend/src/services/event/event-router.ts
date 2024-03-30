@@ -3,6 +3,7 @@ import prisma from "../../lib/db";
 import { NextFunction } from "express-serve-static-core";
 import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
+import { Event } from "@prisma/client";
 
 const eventRouter: Router = Router();
 
@@ -102,9 +103,6 @@ eventRouter.get("/prices/:event_id", async (req: Request, res: Response, next: N
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "event_id URL parameter required"));
     }
 
-    let lowestAsk: number;
-    let highestBid: number;
-
     const eventId = Number(eventIdStr); // eventid: 2, 3, etc.
 
     const event = await prisma.event.findUnique({
@@ -137,7 +135,7 @@ eventRouter.get("/prices/:event_id", async (req: Request, res: Response, next: N
     });
 
     // if lowestAskPrice doesnt exist, set lowestAsk to -1
-    lowestAsk = lowestAskPrice ? lowestAskPrice.price.toNumber() : -1;
+    const lowestAsk = lowestAskPrice ? lowestAskPrice.price.toNumber() : -1;
 
     const highestBidPrice = await prisma.bid.findFirst({
         where: {
@@ -152,9 +150,34 @@ eventRouter.get("/prices/:event_id", async (req: Request, res: Response, next: N
     });
 
     // if highestBidPrice doesnt exist, set highestBid to -1
-    highestBid = highestBidPrice ? highestBidPrice.price.toNumber() : -1;
+    const highestBid = highestBidPrice ? highestBidPrice.price.toNumber() : -1;
 
     return res.status(200).json({ success: true, event: event, lowest_ask: lowestAsk, highest_bid: highestBid });
+});
+
+eventRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
+    const event: Event = req.body as Event;
+
+    if (!event.event_start || !event.event_type || !event.stadium_location || !event.away_team) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
+    }
+    event.sales_enabled = true;
+
+    const createdEvent = await prisma.event.create({
+        data: {
+            event_type: event.event_type,
+            away_team: event.away_team,
+            event_start: event.event_start,
+            sales_enabled: event.sales_enabled,
+            stadium_location: event.stadium_location,
+        },
+    });
+
+    if (!createdEvent) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "error creating event"));
+    }
+
+    return res.status(200).json({ success: true, message: "created event", event: createdEvent });
 });
 
 export default eventRouter;
