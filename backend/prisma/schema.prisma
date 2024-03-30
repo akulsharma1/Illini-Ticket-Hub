@@ -22,7 +22,8 @@ model Event {
     // all tickets for the event
     tickets Ticket[]
 
-    marketplace Marketplace?
+    asks Ask[]
+    bids Bid[]
 
     created_at DateTime @default(now()) @db.Timestamptz(6)
 }
@@ -60,22 +61,22 @@ model Account {
     created_at DateTime @default(now()) @db.Timestamptz(6)
 }
 
-model Marketplace {
-    event_id Int   @id
-    event    Event @relation(fields: [event_id], references: [event_id])
+// model Marketplace {
+//     event_id Int   @id
+//     event    Event @relation(fields: [event_id], references: [event_id])
 
-    asks Ask[]
-    bids Bid[]
+//     asks Ask[]
+//     bids Bid[]
 
-    created_at DateTime @default(now()) @db.Timestamptz(6)
-}
+//     created_at DateTime @default(now()) @db.Timestamptz(6)
+// }
 
 model Ask {
     owner_id Int
     event_id Int
 
     account     Account     @relation(fields: [owner_id], references: [account_id])
-    marketplace Marketplace @relation(fields: [event_id], references: [event_id])
+    event Event @relation(fields: [event_id], references: [event_id])
 
     price Decimal
 
@@ -89,7 +90,7 @@ model Bid {
     event_id Int
 
     account     Account     @relation(fields: [owner_id], references: [account_id])
-    marketplace Marketplace @relation(fields: [event_id], references: [event_id])
+    event Event @relation(fields: [event_id], references: [event_id])
 
     price Decimal
 
