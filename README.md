@@ -30,7 +30,10 @@ Week 5 Progress:
   
   Akul: 
   
-    - A
+    - Added the ability to create a bid (POST /bids/create)
+    - Added the ability to create an ask (POST /asks/create)
+    - Added logic for matching asks/bids and transferring tickets
+    - Added event creation
 
 
 Week 4 Progress:
