@@ -211,7 +211,6 @@ eventRouter.post("/create", async (req: Request, res: Response, next: NextFuncti
  *     }
  */
 
-
 eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, next: NextFunction) => {
     const eventIdStr: string = req.params.event_id;
 
@@ -221,24 +220,24 @@ eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, nex
 
     const eventId = Number(eventIdStr);
 
-    try{
+    try {
         const lowestAskPrices = await prisma.ask.findMany({
             where: {
-                event_id: eventId, 
-            }, 
+                event_id: eventId,
+            },
             select: {
                 price: true,
-            }, 
+            },
             orderBy: {
                 price: "asc",
             },
             take: 5,
         });
-    
+
         const highestBidPrices = await prisma.bid.findMany({
             where: {
-                event_id: eventId, 
-            }, 
+                event_id: eventId,
+            },
             select: {
                 price: true,
             },
@@ -247,21 +246,19 @@ eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, nex
             },
             take: 5,
         });
-    
+
         const top5LowestAsks = lowestAskPrices.map((ask) => ask.price.toNumber());
         const top5HighestBids = highestBidPrices.map((bid) => bid.price.toNumber());
-    
+
         return res.status(200).json({
             success: true,
             event_id: eventId,
             top_5_lowest_asks: top5LowestAsks,
             top_5_highest_bids: top5HighestBids,
         });
-    
-    } catch(error) {
+    } catch (error) {
         return next(new RouterError(StatusCode.ServerErrorInternal, "Internal Server Error"));
     }
-
 });
 
 export default eventRouter;
