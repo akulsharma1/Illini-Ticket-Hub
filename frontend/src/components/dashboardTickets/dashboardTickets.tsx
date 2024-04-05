@@ -141,6 +141,15 @@ const DashboardTickets: React.FC = () => {
     // return <div>Error: {error}</div>;
   }
 
+  console.log(tickets);
+  if (tickets.length === 0) {
+    return (
+      <div className="ticket-list">
+        <div className="ticket-heading"> No Tickets</div>
+      </div>
+    );
+  }
+
   // Render ticket list
   return (
     <div className="ticket-list">
