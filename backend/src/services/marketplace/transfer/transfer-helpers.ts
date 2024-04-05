@@ -1,5 +1,6 @@
 import { Ask, Bid, Ticket } from "@prisma/client";
 import prisma from "../../../lib/db";
+import { addTransaction } from "../transactions/transactions-helper";
 
 /**
  * Transfers ownership to a new owner id. Assumes the ticket is transferrable.
@@ -79,6 +80,12 @@ export async function matchBidAndAsk(bid: Bid, ask: Ask): Promise<void> {
 
     if (!transfer) {
         return Promise.reject("error transferring ticket");
+    }
+
+    const addToTransactionTable = await addTransaction(ask, bid);
+
+    if (!addToTransactionTable) {
+        return Promise.reject("error adding to transaction table");
     }
 
     const deletedBid = await deleteBid(bid);
