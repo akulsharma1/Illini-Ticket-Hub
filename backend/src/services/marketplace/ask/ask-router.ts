@@ -67,7 +67,7 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
     // TODO: handle bid/ask matching
     const highestBid = await findHighestBid(resp);
 
-    if (!highestBid) {
+    if (!highestBid || highestBid.price < resp.price) {
         // is fine, just don't do a transfer
         return res.status(StatusCode.SuccessOK).json({ success: true, message: "placed ask" });
     }
