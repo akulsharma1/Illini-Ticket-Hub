@@ -16,11 +16,7 @@ export async function findLowestAsk(bid: Bid): Promise<Ask> {
 
     const lowestAsk: Ask = lowestAskArr[0];
 
-    if (lowestAsk.price <= bid.price) {
-        return lowestAsk;
-    }
-
-    return null;
+    return lowestAsk;
 }
 
 export async function checkIfAskExists(ask: Ask): Promise<boolean> {

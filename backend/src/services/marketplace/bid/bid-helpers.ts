@@ -16,11 +16,7 @@ export async function findHighestBid(ask: Ask): Promise<Bid> {
 
     const highestBid: Bid = highestBidArr[0];
 
-    if (ask.price >= highestBid.price) {
-        return highestBid;
-    }
-
-    return null;
+    return highestBid;
 }
 
 export async function checkIfBidExists(bid: Bid): Promise<boolean> {
