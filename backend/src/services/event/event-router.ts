@@ -180,7 +180,6 @@ eventRouter.post("/create", async (req: Request, res: Response, next: NextFuncti
     return res.status(200).json({ success: true, message: "created event", event: createdEvent });
 });
 
-// Start of Ritam writing API for pulling top 5 asks and top 5 bids
 /**
  * @api {get} /events/prices/top/:event_id GET /events/prices/top/:event_id
  * @apiGroup event
@@ -216,8 +215,8 @@ eventRouter.post("/create", async (req: Request, res: Response, next: NextFuncti
 eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, next: NextFunction) => {
     const eventIdStr: string = req.params.event_id;
 
-    if (!eventIdStr) {
-        return next(new RouterError(StatusCode.ClientErrorBadRequest, "event_id URL parameter required"));
+    if (!eventIdStr || isNaN(Number(eventIdStr))) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "Valid event_id URL parameter required"));
     }
 
     const eventId = Number(eventIdStr);
@@ -249,8 +248,8 @@ eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, nex
             take: 5,
         });
     
-        const top5LowestAsks = lowestAskPrices.map((ask) => ask.price);
-        const top5HighestBids = highestBidPrices.map((bid) => bid.price);
+        const top5LowestAsks = lowestAskPrices.map((ask) => ask.price.toNumber());
+        const top5HighestBids = highestBidPrices.map((bid) => bid.price.toNumber());
     
         return res.status(200).json({
             success: true,
@@ -264,7 +263,5 @@ eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, nex
     }
 
 });
-// End of new Ritam API
-
 
 export default eventRouter;
