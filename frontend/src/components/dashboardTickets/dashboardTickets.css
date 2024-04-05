@@ -29,21 +29,34 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px #13294B;
     margin-bottom: 10px;
-    max-width: 70%;
-    height: 80px;
+    max-width: 65%;
+    height: 150px;
     position: relative;
 }
 
-.ticket-card .event {
-    font-size: 30px;
-    margin-bottom: 10px;
+.ticket-card .ticket-event-details {
+    margin-top: -30px;
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ticket-card .ticket-event-details h3 {
+    font-size:x-large;
+    margin: 10px 0;
+}
+.ticket-card .ticket-event-details p {
+    margin: 5px 0;
+    font-size:medium;
 }
 
 .ticket-card .listed,
 .ticket-card .unlisted {
     font-size: 30px;
     position: absolute;
-    transform: translateY(-50%);
+    transform: translateY(-100%);
     right: 20px;
 }
 
