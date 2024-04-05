@@ -180,4 +180,91 @@ eventRouter.post("/create", async (req: Request, res: Response, next: NextFuncti
     return res.status(200).json({ success: true, message: "created event", event: createdEvent });
 });
 
+// Start of Ritam writing API for pulling top 5 asks and top 5 bids
+/**
+ * @api {get} /events/prices/top/:event_id GET /events/prices/top/:event_id
+ * @apiGroup event
+ * @apiDescription Retrieves the top 5 lowest ask prices and top 5 highest bid prices for a given event_id.
+ *
+ * @apiParam {int} event_id Event ID. Returns status code 400 if not specified.
+ *
+ * @apiSuccess (200: Success) {Boolean} success Indicates if the request was successful.
+ * @apiSuccess (200: Success) {int} event_id The ID of the event.
+ * @apiSuccess (200: Success) {Number[]} top_5_lowest_asks Array of the top 5 lowest ask prices.
+ * @apiSuccess (200: Success) {Number[]} top_5_highest_bids Array of the top 5 highest bid prices.
+ *
+ * @apiSuccessExample Example Success Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "success": true,
+ *     "event_id": 123,
+ *     "top_5_lowest_asks": [100, 110, 120, 130, 140],
+ *     "top_5_highest_bids": [300, 290, 280, 270, 260]
+ * }
+ *
+ * @apiError (400: Bad Request) {String} "event_id URL parameter required" Event ID URL parameter is required (e.g. /events/prices/top/123).
+ * @apiError (404: Not Found) {String} "event not found" Event with the specified Event ID was not found.
+ * @apiErrorExample Example Error Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *         "success": false,
+ *         "error": "event_id URL parameter required"
+ *     }
+ */
+
+
+eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, next: NextFunction) => {
+    const eventIdStr: string = req.params.event_id;
+
+    if (!eventIdStr) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "event_id URL parameter required"));
+    }
+
+    const eventId = Number(eventIdStr);
+
+    try{
+        const lowestAskPrices = await prisma.ask.findMany({
+            where: {
+                event_id: eventId, 
+            }, 
+            select: {
+                price: true,
+            }, 
+            orderBy: {
+                price: "asc",
+            },
+            take: 5,
+        });
+    
+        const highestBidPrices = await prisma.bid.findMany({
+            where: {
+                event_id: eventId, 
+            }, 
+            select: {
+                price: true,
+            },
+            orderBy: {
+                price: "desc",
+            },
+            take: 5,
+        });
+    
+        const top5LowestAsks = lowestAskPrices.map((ask) => ask.price);
+        const top5HighestBids = highestBidPrices.map((bid) => bid.price);
+    
+        return res.status(200).json({
+            success: true,
+            event_id: eventId,
+            top_5_lowest_asks: top5LowestAsks,
+            top_5_highest_bids: top5HighestBids,
+        });
+    
+    } catch(error) {
+        return next(new RouterError(StatusCode.ServerErrorInternal, "Internal Server Error"));
+    }
+
+});
+// End of new Ritam API
+
+
 export default eventRouter;
