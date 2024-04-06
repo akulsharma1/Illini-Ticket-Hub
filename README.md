@@ -18,6 +18,8 @@ Week 6 Progress:
   
     - Connected the buy now and make new bid buttons up to the backend (makes call to the bid endpoint)
     - Created a modal which pops up on the screen to let the user enter an amount to bid in a textbox
+    - Connected sell now and make new ask buttons to backend
+    - Created ask modal to let user enter a specific amount to ask for
 
     
   Ritam: 
