@@ -145,3 +145,30 @@
     background-color: #45a049;
   }
   
+  .topasksandbids-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .topasksandbids-card .card-header {
+    background-color: #13294b;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .topasksandbids-card .card-content {
+    padding: 20px;
+  }
+  
+  .topasksandbids-card .card-title {
+    margin: 0;
+  }
