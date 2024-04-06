@@ -9,6 +9,28 @@ Week 5 Progress:
 
   Aaron:
   
+    - a
+    
+  Adrian:
+  
+    - a
+
+    
+  Ritam: 
+  
+    - a
+
+  
+  Akul: 
+  
+    - Added transactions table
+    - Integrated transactions table with sales - when a sale occurs it gets added to the transactions table
+    - Cleaned up some transfer/sale helper functions
+
+Week 5 Progress:
+
+  Aaron:
+  
     - Added images to eventsView page to help with aesthetics
     - Added sign-out button to all pages
     - fixed various small UI issues for better viewing experience
