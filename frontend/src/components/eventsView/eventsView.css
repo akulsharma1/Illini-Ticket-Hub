@@ -34,6 +34,18 @@
     flex-direction: column;
     align-items: flex-start;
 }
+  
+  
+
+.event-details {
+    padding: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 1; /* Ensure content is above the image */
+}
+
 
 .event-details h3 {
     font-size: larger;
@@ -70,6 +82,7 @@
     height: 80px;
     cursor: pointer;
     box-sizing: border-box;
+    z-index: 1;
 }
 
 .buy-button-event:hover,

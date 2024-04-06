@@ -33,7 +33,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
         <p className="event-date">Date: {formattedDate}</p>
       </div>
       <div className="event-image-container">
-        <img src={eventImage} alt="Event Image" className="event-image"/>
+        <img src={eventImage} alt="Event Image" className="event-image" />
       </div>
       <div className="event-actions">
         <Link to={`/buy/${event.event_id}`}>
