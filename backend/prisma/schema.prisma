@@ -25,6 +25,8 @@ model Event {
     asks Ask[]
     bids Bid[]
 
+    transactions Transaction[]
+
     created_at DateTime @default(now()) @db.Timestamptz(6)
 }
 
@@ -58,18 +60,14 @@ model Account {
     asks Ask[]
     bids Bid[]
 
+    // Transactions where the account is the buyer
+    buyerTransactions Transaction[] @relation("BuyerTransactions")
+
+    // Transactions where the account is the seller
+    sellerTransactions Transaction[] @relation("SellerTransactions")
+
     created_at DateTime @default(now()) @db.Timestamptz(6)
 }
-
-// model Marketplace {
-//     event_id Int   @id
-//     event    Event @relation(fields: [event_id], references: [event_id])
-
-//     asks Ask[]
-//     bids Bid[]
-
-//     created_at DateTime @default(now()) @db.Timestamptz(6)
-// }
 
 model Ask {
     owner_id Int
@@ -97,4 +95,18 @@ model Bid {
     created_at DateTime @default(now()) @db.Timestamptz(6)
 
     @@id([owner_id, event_id])
+}
+
+model Transaction {
+    buyer_id       Int
+    seller_id      Int
+    event_id       Int
+    price          Decimal
+    created_at DateTime @default(now()) @db.Timestamptz(6)
+
+    buyer          Account @relation(name: "BuyerTransactions", fields: [buyer_id], references: [account_id])
+    seller         Account @relation(name: "SellerTransactions", fields: [seller_id], references: [account_id])
+    event          Event   @relation(fields: [event_id], references: [event_id])
+
+    @@id([buyer_id, seller_id, created_at])
 }

@@ -72,7 +72,7 @@ bidRouter.post("/create", async (req: Request, res: Response, next: NextFunction
 
     const lowestAsk = await findLowestAsk(resp);
 
-    if (!lowestAsk) {
+    if (!lowestAsk || lowestAsk.price > resp.price) {
         // is fine, just don't do a transfer
         return res.status(StatusCode.SuccessOK).json({ success: true, message: "placed bid" });
     }
