@@ -13,7 +13,8 @@ Week 6 Progress:
     
   Adrian:
   
-    - a
+    - Connected the buy now and make new bid buttons up to the backend (makes call to the bid endpoint)
+    - Created a modal which pops up on the screen to let the user enter an amount to bid in a textbox
 
     
   Ritam: 
