@@ -19,7 +19,8 @@ Week 6 Progress:
     
   Ritam: 
   
-    - a
+    - Wrote backend API that returns the top 5 lowest asks and the top 5 highest bids for each specific event
+    - Updated frontend in the sell and buy pages with a new card that displays the top 5 lowest asks and top 5 highest bids
 
   
   Akul: 
