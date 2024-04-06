@@ -9,7 +9,10 @@ Week 6 Progress:
 
   Aaron:
   
-    - a
+    - Connected dashboard page to backend to display tickets dynamically
+    - Fixed minor bug where signout button doesn't cover entire button
+    - Created backend API that returns the total bids associated with an account and the total asks associated with an account
+    - Used above APIs to connect more of accountView to the frontendd
     
   Adrian:
   
