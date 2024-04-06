@@ -124,4 +124,38 @@ accountRouter.post("/sign-in", async (req: Request, res: Response, next: NextFun
     });
 });
 
+// GET bids for a given account
+accountRouter.get("/bids", async (req: Request, res: Response, next: NextFunction) => {
+    const profileId = req.query.id as string | undefined;
+
+    if (!profileId) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
+    }
+
+    const bids = await prisma.bid.findMany({
+        where: { owner_id: Number(profileId) },
+    });
+
+    const count = bids.length;
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, bids: bids, count: count });
+});
+
+// GET asks for a given account
+accountRouter.get("/asks", async (req: Request, res: Response, next: NextFunction) => {
+    const profileId = req.query.id as string | undefined;
+
+    if (!profileId) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
+    }
+
+    const asks = await prisma.ask.findMany({
+        where: { owner_id: Number(profileId) },
+    });
+
+    const count = asks.length;
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, asks: asks, count: count });
+});
+
 export default accountRouter;
