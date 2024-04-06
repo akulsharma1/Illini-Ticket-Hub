@@ -10,11 +10,17 @@ interface Event {
   stadium_location: string;
 }
 
+interface TopPrices {
+  top_5_lowest_asks: number[];
+  top_5_highest_bids: number[];
+}
+
 const BuyPage: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const [event, setEvent] = useState<Event | null>(null);
   const [lowestAsk, setLowestAsk] = useState<number>(-1);
   const [highestBid, setHighestBid] = useState<number>(-1);
+  const [topPrices, setTopPrices] = useState<TopPrices | null>(null);
   const [isBidModalOpen, setIsBidModalOpen] = useState(false); // State to control modal visibility
 
   useEffect(() => {
@@ -30,6 +36,18 @@ const BuyPage: React.FC = () => {
         setEvent(eventData.event);
         setLowestAsk(eventData.lowest_ask);
         setHighestBid(eventData.highest_bid);
+
+        const topPricesResponse = await fetch(`http://localhost:5555/events/prices/top/${eventId}`);
+        if (!topPricesResponse.ok) {
+          throw new Error("Failed to fetch top prices");
+        }
+        const topPricesData = await topPricesResponse.json();
+        setTopPrices({
+          top_5_lowest_asks: topPricesData.top_5_lowest_asks,
+          top_5_highest_bids: topPricesData.top_5_highest_bids,
+        });
+
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -128,6 +146,19 @@ const BuyPage: React.FC = () => {
             <p>Event Start: {formattedDate}</p>
           </div>
         </div>
+
+        {topPrices && (
+          <div className="topasksandbids-card">
+            <div className="card-header">
+              <h2 className="card-title">Top 5 Highest Bids and Lowest Asks</h2>
+            </div>
+            <div className="card-content">
+              <p>Top 5 Lowest Asks: {topPrices.top_5_lowest_asks.join(", ")}</p>
+              <p>Top 5 Highest Bids: {topPrices.top_5_highest_bids.join(", ")}</p>
+            </div>
+          </div>
+        )}
+
         <div className="action-card">
           <div className="card-header">
             <h2 className="card-title">Buy</h2>
