@@ -52,7 +52,7 @@
   margin-top: 20px;
 }
 
-.button-container .buy-button {
+.button-container .ask-button {
   padding: 8px 12px;
   width: 150px;
   background-color: #4CAF50;
@@ -77,6 +77,72 @@
 .button-container .buy-button:hover,
 .button-container .sell-button:hover {
   filter: brightness(85%);
+}
+
+/* Modal Backdrop */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+/* Modal Content */
+.modal-content {
+  width: calc(100% - 300px); /* Adjust based on sidebar width */
+  max-width: 600px; /* Maximum width */
+  background-color: #fff;
+  padding: 20px;
+  margin: 15px; /* Distance from viewport edges */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Input Field */
+.modal-content input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Submit Button */
+.modal-content button {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #45a049;
 }
 
 .topasksandbids-card {
