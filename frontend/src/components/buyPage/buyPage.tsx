@@ -55,6 +55,38 @@ const BuyPage: React.FC = () => {
     ? new Date(event.event_start).toLocaleDateString()
     : "";
 
+  const handleBuyLowest = async () => {
+    try {
+      // Retrieve user ID from local storage
+      const userProfile = localStorage.getItem("userProfile");
+      if (!userProfile) {
+        console.error("User profile not found in local storage");
+        return;
+      }
+      const ownerId = JSON.parse(userProfile).account_id;
+
+      // Send bid creation request with owner ID
+      const response = await fetch("http://localhost:5555/bids/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: lowestAsk,
+          event_id: event.event_id,
+          owner_id: ownerId, // Use retrieved owner ID
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create bid");
+      }
+      const responseData = await response.json();
+      console.log(responseData); // Log response from backend
+    } catch (error) {
+      console.error("Error creating bid:", error);
+    }
+  };
+
   return (
     <div className="buy-page">
       <div className="container">
@@ -73,12 +105,12 @@ const BuyPage: React.FC = () => {
             <h2 className="card-title">Buy</h2>
           </div>
           <div className="button-container">
-            <button className="buy-button">
+            <button className="buy-button" onClick={handleBuyLowest}>
               Buy Now
               <br />
               Lowest Ask: {lowestAsk}
             </button>
-            <button className="sell-button">
+            <button className="bid-button">
               Place New Bid
               <br />
               Highest Bid: {highestBid}
