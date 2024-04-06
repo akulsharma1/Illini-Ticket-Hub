@@ -21,11 +21,14 @@ const SellPage: React.FC = () => {
   const [lowestAsk, setLowestAsk] = useState<number>(-1);
   const [highestBid, setHighestBid] = useState<number>(-1);
   const [topPrices, setTopPrices] = useState<TopPrices | null>(null);
+  const [isAskModalOpen, setIsAskModalOpen] = useState(false); // State to control modal visibility
 
   useEffect(() => {
     const fetchData = async (eventId: number) => {
       try {
-        const response = await fetch(`http://localhost:5555/events/prices/${eventId}`);
+        const response = await fetch(
+          `http://localhost:5555/events/prices/${eventId}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch event data");
         }
@@ -35,7 +38,9 @@ const SellPage: React.FC = () => {
         setLowestAsk(eventData.lowest_ask);
         setHighestBid(eventData.highest_bid);
 
-        const topPricesResponse = await fetch(`http://localhost:5555/events/prices/top/${eventId}`);
+        const topPricesResponse = await fetch(
+          `http://localhost:5555/events/prices/top/${eventId}`
+        );
         if (!topPricesResponse.ok) {
           throw new Error("Failed to fetch top prices");
         }
@@ -60,11 +65,75 @@ const SellPage: React.FC = () => {
     }
   }, []);
 
+  // Function to handle "Buy Now Lowest Ask"
+  const handleAskHighest = async () => {
+    try {
+      const userProfile = localStorage.getItem("userProfile");
+      if (!userProfile) {
+        console.error("User profile not found in local storage");
+        return;
+      }
+      const ownerId = JSON.parse(userProfile).account_id;
+
+      const response = await fetch("http://localhost:5555/asks/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: highestBid,
+          event_id: event!.event_id,
+          owner_id: ownerId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create ask");
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+    } catch (error) {
+      console.error("Error creating ask:", error);
+    }
+  };
+
+  const handlePlaceNewAsk = async (askValue: number) => {
+    setIsAskModalOpen(false);
+    try {
+      const userProfile = localStorage.getItem("userProfile");
+      if (!userProfile) {
+        console.error("User profile not found in local storage");
+        return;
+      }
+      const ownerId = JSON.parse(userProfile).account_id;
+
+      const response = await fetch("http://localhost:5555/asks/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: askValue,
+          event_id: event?.event_id,
+          owner_id: ownerId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create ask");
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+    } catch (error) {
+      console.error("Error creating ask:", error);
+    }
+  };
+
   if (!event) {
     return <div>Event not found</div>;
   }
 
-  const formattedDate = event.event_start ? new Date(event.event_start).toLocaleDateString() : "";
+  const formattedDate = event.event_start
+    ? new Date(event.event_start).toLocaleDateString()
+    : "";
 
   return (
     <div className="sell-page">
@@ -87,7 +156,9 @@ const SellPage: React.FC = () => {
             </div>
             <div className="card-content">
               <p>Top 5 Lowest Asks: {topPrices.top_5_lowest_asks.join(", ")}</p>
-              <p>Top 5 Highest Bids: {topPrices.top_5_highest_bids.join(", ")}</p>
+              <p>
+                Top 5 Highest Bids: {topPrices.top_5_highest_bids.join(", ")}
+              </p>
             </div>
           </div>
         )}
@@ -97,18 +168,63 @@ const SellPage: React.FC = () => {
             <h2 className="card-title">Sell</h2>
           </div>
           <div className="button-container">
-            <button className="buy-button">
-              Place New Ask
-              <br />
-              Lowest Ask: {lowestAsk}
-            </button>
-            <button className="sell-button">
+            <button className="sell-button" onClick={handleAskHighest}>
               Sell Now
               <br />
               Highest Bid: {highestBid}
             </button>
+            <button
+              className="ask-button"
+              onClick={() => setIsAskModalOpen(true)}
+            >
+              Place New Ask
+              <br />
+              Lowest Ask: {lowestAsk}
+            </button>
           </div>
         </div>
+      </div>
+      <AskModal
+        isOpen={isAskModalOpen}
+        onClose={() => setIsAskModalOpen(false)}
+        onSubmit={handlePlaceNewAsk}
+      />
+    </div>
+  );
+};
+
+interface AskModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (askValue: number) => void;
+}
+
+const AskModal: React.FC<AskModalProps> = ({ isOpen, onClose, onSubmit }) => {
+  const [askValue, setAskValue] = useState("");
+
+  if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    const value = parseFloat(askValue);
+    if (!isNaN(value) && value > 0) {
+      onSubmit(value);
+    }
+  };
+
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>
+          &times;
+        </span>
+        <h2>Place Your Ask</h2>
+        <input
+          type="number"
+          value={askValue}
+          onChange={(e) => setAskValue(e.target.value)}
+          placeholder="Enter ask amount"
+        />
+        <button onClick={handleSubmit}>Submit Ask</button>
       </div>
     </div>
   );
