@@ -170,6 +170,10 @@ accountRouter.post("/create-ticket", async (req: Request, res: Response, next: N
     const accountId = Number(accountIdStr);
     const eventId = Number(eventIdStr);
 
+    if (isNaN(accountId) && isNaN(eventId)) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid ticket creation params"));
+    }
+
     const ticket = await prisma.ticket.findUnique({
         where: {
             owner_id_event_id: {
