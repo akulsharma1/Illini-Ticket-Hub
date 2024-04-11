@@ -21,11 +21,13 @@ const SellPage: React.FC = () => {
   const [lowestAsk, setLowestAsk] = useState<number>(-1);
   const [highestBid, setHighestBid] = useState<number>(-1);
   const [topPrices, setTopPrices] = useState<TopPrices | null>(null);
+  const [askPrice, setAskPrice] = useState<number>(-1); // Initialize with a default value (-1 or any appropriate default value)
   const [isAskModalOpen, setIsAskModalOpen] = useState(false); // State to control modal visibility
 
   useEffect(() => {
     const fetchData = async (eventId: number) => {
       try {
+
         const response = await fetch(
           `http://localhost:5555/events/prices/${eventId}`
         );
@@ -37,7 +39,6 @@ const SellPage: React.FC = () => {
         setEvent(eventData.event);
         setLowestAsk(eventData.lowest_ask);
         setHighestBid(eventData.highest_bid);
-
         const topPricesResponse = await fetch(
           `http://localhost:5555/events/prices/top/${eventId}`
         );
@@ -49,9 +50,27 @@ const SellPage: React.FC = () => {
           top_5_lowest_asks: topPricesData.top_5_lowest_asks,
           top_5_highest_bids: topPricesData.top_5_highest_bids,
         });
+        
+        
+
+        const userProfile = localStorage.getItem("userProfile");
+        if (!userProfile) {
+          console.error("User profile not found in local storage");
+          return;
+        }
+        const ownerId = JSON.parse(userProfile).account_id;
+
+        const askResponse = await fetch(`http://localhost:5555/account/userask/${eventId}/${ownerId}`);
+        if (!askResponse.ok) {
+          throw new Error("Failed to fetch ask price"); 
+        }
+        const askData = await askResponse.json();
+        console.log(askData);
+        setAskPrice(askData.CurrentAsk);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+
     };
 
     const storedEvent = localStorage.getItem("currEvent");
@@ -63,6 +82,8 @@ const SellPage: React.FC = () => {
     } else {
       console.error("Event not found in local storage");
     }
+
+    
   }, []);
 
   // Function to handle "Buy Now Lowest Ask"
@@ -95,6 +116,16 @@ const SellPage: React.FC = () => {
       console.error("Error creating ask:", error);
     }
   };
+
+  const formatPrices = (prices: number[] | null | undefined): string => {
+    if (!prices || prices.length === 0) {
+      return "N/A";
+    }
+    
+    const formattedPrices = prices.map(price => `$${price.toFixed(2)}`);
+    return formattedPrices.join(", ");
+  };
+  
 
   const handlePlaceNewAsk = async (askValue: number) => {
     setIsAskModalOpen(false);
@@ -155,10 +186,9 @@ const SellPage: React.FC = () => {
               <h2 className="card-title">Top 5 Highest Bids and Lowest Asks</h2>
             </div>
             <div className="card-content">
-              <p>Top 5 Lowest Asks: {topPrices.top_5_lowest_asks.join(", ")}</p>
-              <p>
-                Top 5 Highest Bids: {topPrices.top_5_highest_bids.join(", ")}
-              </p>
+            <p>Top 5 Lowest Asks: {formatPrices(topPrices.top_5_lowest_asks)}</p>
+            <p>Top 5 Highest Bids: {formatPrices(topPrices.top_5_highest_bids)}</p>
+            <p>Your Current Ask: {askPrice !== -1 ? `$${askPrice.toFixed(2)}` : "N/A"}</p>
             </div>
           </div>
         )}
