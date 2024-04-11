@@ -126,4 +126,69 @@ askRouter.post("/userAskExists", async (req: Request, res: Response, next: NextF
     }
 });
 
+// askRouter.get("/askforevent/:event_id/:profile_id", async (req: Request, res: Response, next: NextFunction) => {
+//     const ask: Ask = req.body as Ask;
+//     const eventIdStr: string = req.params.event_id;
+//     const profileId: string = req.params.profile_id;
+
+//     if (!ask.price || !ask.event_id || !ask.owner_id) {
+//         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
+//     }
+
+//     if (!profileId) {
+//         return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
+//     }
+
+//     if (!eventIdStr) {
+//         return next(new RouterError(StatusCode.ClientErrorBadRequest, "event_id URL parameter required"));
+//     }
+
+//     const eventId = Number(eventIdStr);
+
+//     try {
+//         const event = await prisma.event.findUnique({
+//             where: {
+//                 event_id: eventId,
+//             },
+//             select: {
+//                 event_id: true,
+//                 event_type: true,
+//                 away_team: true,
+//                 event_start: true,
+//                 stadium_location: true,
+//             },
+//         });
+
+//         if (!event) {
+//             return next(new RouterError(StatusCode.ClientErrorNotFound, "Event not found"));
+//         }
+
+//         const ask = await prisma.ask.findUnique({
+//             where: {
+//                 owner_id_event_id: {
+//                     owner_id: Number(profileId),
+//                     event_id: eventId
+//                 }
+//             },
+//             select: {
+//                 price: true,
+//             }
+//         });
+
+//         let askPriceResponse = -1
+
+//         if (ask) {
+//             askPriceResponse = Number(ask.price);
+//         }
+
+//         return res.status(200).json({
+//             success: true,
+//             ask_price: askPriceResponse,
+//         });
+//     } catch (error) {
+//         console.error("Error fetching data:", error);
+//         return next(new RouterError(StatusCode.ServerErrorInternal, "Internal Server Error"));
+//     }
+// });
+
 export default askRouter;

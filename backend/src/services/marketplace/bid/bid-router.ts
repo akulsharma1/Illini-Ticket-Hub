@@ -161,5 +161,4 @@ bidRouter.post("/userBidExists", async (req: Request, res: Response, next: NextF
     }
 });
 
-
 export default bidRouter;
