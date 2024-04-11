@@ -25,7 +25,7 @@ export async function transferOwnership(ticket: Ticket, newOwnerId: number): Pro
 }
 
 export async function checkIfTransferrableTicket(ticket: Ticket): Promise<boolean | undefined> {
-    if (ticket.listed || ticket.used) {
+    if (!ticket.listed || ticket.used) {
         return false;
     }
 

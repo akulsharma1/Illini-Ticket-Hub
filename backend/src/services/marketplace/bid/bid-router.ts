@@ -36,6 +36,60 @@ bidRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json({ success: true, bids: bids });
 });
 
+bidRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) => {
+    const bid: Bid = req.body as Bid;   // not actually a new bid, just contains all the info we need to update an existing bid
+
+    if (!bid.price || !bid.event_id || !bid.owner_id) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
+    }
+
+    const bidExists = await checkIfBidExists(bid);
+
+    if (!bidExists) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "must have an active bid before editing it"));
+    }
+
+    // don't need to check if the user owns a ticket b/c to place a bid, they must own a ticket and
+    // we already checked if they have a bid or not
+
+    const updatedBid = await prisma.bid.update({
+        where: {
+            // the primary key of a bid is a composite key made from owner_id and event_id
+            owner_id_event_id: {
+                owner_id: bid.owner_id,
+                event_id: bid.event_id,
+            }
+        }, 
+        data: {
+            price: bid.price
+        }
+    })
+    .catch((error) => {
+        return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "error adding bid", undefined, error.message));
+    });
+
+    if (!updatedBid) {
+        return next(new RouterError(StatusCode.ServerErrorInternal, "error editing bid"));
+    }
+
+    const lowestAsk = await findLowestAsk(updatedBid);
+
+    if (!lowestAsk || lowestAsk.price > updatedBid.price) {
+        // is fine, just don't do a transfer
+        return res.status(StatusCode.SuccessOK).json({ success: true, message: "placed bid" });
+    }
+
+    await matchBidAndAsk(updatedBid, lowestAsk)
+        .then(() => {
+            return res
+                .status(StatusCode.SuccessCreated)
+                .json({ success: true, message: "transferred ticket to new owner. new ownerid: " + updatedBid.owner_id });
+        })
+        .catch((reason: any) => {
+            return next(new RouterError(StatusCode.ServerErrorInternal, "error executing sale, bid placed", undefined, reason));
+        });
+});
+
 bidRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
     const bid: Bid = req.body as Bid;
 
