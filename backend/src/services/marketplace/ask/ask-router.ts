@@ -35,6 +35,7 @@ askRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
 askRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
     const ask: Ask = req.body as Ask;
 
+    // TODO: change to new ask format checker
     if (!ask.price || !ask.event_id || !ask.owner_id) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
     }
