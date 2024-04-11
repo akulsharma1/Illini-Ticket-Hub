@@ -8,6 +8,7 @@ import BuyPage from "./components/buyPage/buyPage";
 import SellPage from "./components/sellPage/sellPage";
 import EventsView from "./components/eventsView/eventsView";
 import SignOutButton from "./components/signOutButton/signOutButton";
+import CreateTicketButton from "./components/createTicketButton/createTicketButton";
 import {
   BrowserRouter as Router,
   Routes,
@@ -22,6 +23,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="main-app">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <CreateTicketButton />
       <SignOutButton />
       <DashboardTickets />
     </div>

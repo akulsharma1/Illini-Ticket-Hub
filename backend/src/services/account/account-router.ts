@@ -158,4 +158,43 @@ accountRouter.get("/asks", async (req: Request, res: Response, next: NextFunctio
     return res.status(StatusCode.SuccessOK).json({ success: true, asks: asks, count: count });
 });
 
+// create ticket
+accountRouter.post("/create-ticket", async (req: Request, res: Response, next: NextFunction) => {
+    const accountIdStr: string = req.body.account_id;
+    const eventIdStr: string = req.body.event_id;
+
+    if (!accountIdStr || !eventIdStr) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid ticket creation params"));
+    }
+
+    const accountId = Number(accountIdStr);
+    const eventId = Number(eventIdStr);
+
+    const ticket = await prisma.ticket.findUnique({
+        where: {
+            owner_id_event_id: {
+                owner_id: accountId,
+                event_id: eventId,
+            },
+        },
+    });
+
+    if (ticket) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "already has ticket"));
+    }
+
+    try {
+        await prisma.ticket.create({
+            data: {
+                owner_id: accountId,
+                event_id: eventId,
+            },
+        });
+    } catch (error) {
+        return next(new RouterError(StatusCode.ServerErrorInternal, "error creating ticket", undefined, error));
+    }
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, message: "created ticket" });
+});
+
 export default accountRouter;
