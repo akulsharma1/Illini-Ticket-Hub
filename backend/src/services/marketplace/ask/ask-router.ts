@@ -64,6 +64,31 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
     if (!resp) {
         return next(new RouterError(StatusCode.ServerErrorInternal, "error adding ask"));
     }
+
+    // change the ticket to be listed
+    const setListed = await prisma.ticket
+        .update({
+            where: {
+                // the primary key of a bid is a composite key made from owner_id and event_id
+                owner_id_event_id: {
+                    owner_id: ask.owner_id,
+                    event_id: ask.event_id,
+                },
+            },
+            data: {
+                listed: true,
+            },
+        })
+        .catch((error) => {
+            return next(
+                new RouterError(StatusCode.ClientErrorPreconditionFailed, "failed to list ticket", undefined, error.message),
+            );
+        });
+
+    if (!setListed) {
+        return next(new RouterError(StatusCode.ServerErrorInternal, "failed to list ticket"));
+    }
+
     // TODO: handle bid/ask matching
     const highestBid = await findHighestBid(resp);
 

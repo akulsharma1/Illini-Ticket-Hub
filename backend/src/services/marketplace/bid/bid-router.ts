@@ -37,7 +37,7 @@ bidRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 bidRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) => {
-    const bid: Bid = req.body as Bid;   // not actually a new bid, just contains all the info we need to update an existing bid
+    const bid: Bid = req.body as Bid; // not actually a new bid, just contains all the info we need to update an existing bid
 
     if (!bid.price || !bid.event_id || !bid.owner_id) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
@@ -52,21 +52,22 @@ bidRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) 
     // don't need to check if the user owns a ticket b/c to place a bid, they must own a ticket and
     // we already checked if they have a bid or not
 
-    const updatedBid = await prisma.bid.update({
-        where: {
-            // the primary key of a bid is a composite key made from owner_id and event_id
-            owner_id_event_id: {
-                owner_id: bid.owner_id,
-                event_id: bid.event_id,
-            }
-        }, 
-        data: {
-            price: bid.price
-        }
-    })
-    .catch((error) => {
-        return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "error adding bid", undefined, error.message));
-    });
+    const updatedBid = await prisma.bid
+        .update({
+            where: {
+                // the primary key of a bid is a composite key made from owner_id and event_id
+                owner_id_event_id: {
+                    owner_id: bid.owner_id,
+                    event_id: bid.event_id,
+                },
+            },
+            data: {
+                price: bid.price,
+            },
+        })
+        .catch((error) => {
+            return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "error adding bid", undefined, error.message));
+        });
 
     if (!updatedBid) {
         return next(new RouterError(StatusCode.ServerErrorInternal, "error editing bid"));
