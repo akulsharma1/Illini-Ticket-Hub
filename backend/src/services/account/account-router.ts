@@ -195,7 +195,8 @@ accountRouter.post("/create-ticket", async (req: Request, res: Response, next: N
     }
 
     return res.status(StatusCode.SuccessOK).json({ success: true, message: "created ticket" });
-  
+});
+
 // GET asks for a given account for a given event
 accountRouter.get("/userask/:event_id/:profile_id", async (req: Request, res: Response, next: NextFunction) => {
     // const profileId = req.query.id as string | undefined;
