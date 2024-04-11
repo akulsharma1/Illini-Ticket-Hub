@@ -6,6 +6,7 @@ import { NextFunction } from "express-serve-static-core";
 import { Account } from "@prisma/client";
 import { decodeWithPrivateKey, encodeWithPublicKey } from "./account-helpers";
 import { rsaPrivateKey, rsaPublicKey } from "../../lib/rsa";
+import { isValidAccountFormat, isValidSigninAccountFormat } from "./account-formats";
 
 const accountRouter: Router = Router();
 
@@ -26,6 +27,7 @@ accountRouter.get("/profile", async (req: Request, res: Response, next: NextFunc
             account_id: true,
             email_address: true,
             name: true,
+            created_at: true,
         },
     });
 
@@ -77,7 +79,7 @@ accountRouter.post("/create", async (req: Request, res: Response, next: NextFunc
     const account: Account = req.body as Account;
     console.log(account);
 
-    if (!account.email_address || !account.name || !account.password) {
+    if (!isValidAccountFormat(account)) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid account creation params"));
     }
 
@@ -100,28 +102,37 @@ accountRouter.post("/create", async (req: Request, res: Response, next: NextFunc
 // endpoint to sign into account
 accountRouter.post("/sign-in", async (req: Request, res: Response, next: NextFunction) => {
     const account: Account = req.body as Account;
-    if (!account.email_address || !account.password) {
+
+    if (!isValidSigninAccountFormat(account)) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid account creation params"));
     }
 
-    const profile = await prisma.account.findUnique({
-        where: { email_address: account.email_address },
-    });
+    try {
+        const profile = await prisma.account.findUnique({
+            where: { email_address: account.email_address },
+        });
 
-    // check if decoded password == inputted password
-    if (decodeWithPrivateKey(profile.password, rsaPrivateKey) !== account.password) {
-        return next(new RouterError(StatusCode.ClientErrorUnprocessableEntity, "invalid password"));
+        if (!profile) {
+            return next(new RouterError(StatusCode.ClientErrorBadRequest, "email doesn't exist"));
+        }
+
+        // check if decoded password == inputted password
+        if (decodeWithPrivateKey(profile.password, rsaPrivateKey) !== account.password) {
+            return next(new RouterError(StatusCode.ClientErrorUnprocessableEntity, "invalid password"));
+        }
+
+        return res.status(StatusCode.SuccessOK).json({
+            success: true,
+            message: "logged into account",
+            profile: {
+                account_id: profile.account_id,
+                email_address: profile.email_address,
+                name: profile.name,
+            },
+        });
+    } catch (e) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "error signing in", undefined, e));
     }
-
-    return res.status(StatusCode.SuccessOK).json({
-        success: true,
-        message: "logged into account",
-        profile: {
-            account_id: profile.account_id,
-            email_address: profile.email_address,
-            name: profile.name,
-        },
-    });
 });
 
 // GET bids for a given account
