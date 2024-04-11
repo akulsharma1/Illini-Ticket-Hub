@@ -114,7 +114,7 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
      */
 });
 
-askRouter.post("/userBidExists", async (req: Request, res: Response, next: NextFunction) => {
+askRouter.post("/userAskExists", async (req: Request, res: Response, next: NextFunction) => {
     const ask: Ask = req.body as Ask;
     try {
         const askExists = await checkIfAskExists(ask);
