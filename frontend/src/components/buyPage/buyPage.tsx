@@ -21,6 +21,7 @@ const BuyPage: React.FC = () => {
   const [lowestAsk, setLowestAsk] = useState<number>(-1);
   const [highestBid, setHighestBid] = useState<number>(-1);
   const [topPrices, setTopPrices] = useState<TopPrices | null>(null);
+  const [bidPrice, setBidPrice] = useState<number>(-1); // Initialize with a default value (-1 or any appropriate default value)
   const [isBidModalOpen, setIsBidModalOpen] = useState(false); // State to control modal visibility
 
   useEffect(() => {
@@ -48,9 +49,25 @@ const BuyPage: React.FC = () => {
         });
 
 
+
+        const userProfile = localStorage.getItem("userProfile");
+        if (!userProfile) {
+          console.error("User profile not found in local storage");
+          return;
+        }
+        const ownerId = JSON.parse(userProfile).account_id;
+
+        const bidResponse = await fetch(`http://localhost:5555/account/userbid/${eventId}/${ownerId}`);
+        if (!bidResponse.ok) {
+          throw new Error("Failed to fetch bid price"); 
+        }
+        const bidData = await bidResponse.json();
+        console.log(bidData);
+        setBidPrice(bidData.CurrentBid);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+
     };
 
     const storedEvent = localStorage.getItem("currEvent");
@@ -92,6 +109,15 @@ const BuyPage: React.FC = () => {
     } catch (error) {
       console.error("Error creating bid:", error);
     }
+  };
+
+  const formatPrices = (prices: number[] | null | undefined): string => {
+    if (!prices || prices.length === 0) {
+      return "N/A";
+    }
+    
+    const formattedPrices = prices.map(price => `$${price.toFixed(2)}`);
+    return formattedPrices.join(", ");
   };
 
   const handlePlaceNewBid = async (bidValue: number) => {
@@ -153,8 +179,9 @@ const BuyPage: React.FC = () => {
               <h2 className="card-title">Top 5 Highest Bids and Lowest Asks</h2>
             </div>
             <div className="card-content">
-              <p>Top 5 Lowest Asks: {topPrices.top_5_lowest_asks.join(", ")}</p>
-              <p>Top 5 Highest Bids: {topPrices.top_5_highest_bids.join(", ")}</p>
+            <p>Top 5 Lowest Asks: {formatPrices(topPrices.top_5_lowest_asks)}</p>
+            <p>Top 5 Highest Bids: {formatPrices(topPrices.top_5_highest_bids)}</p>
+            <p>Your Current Bid: {bidPrice !== -1 ? `$${bidPrice.toFixed(2)}` : "N/A"}</p>
             </div>
           </div>
         )}

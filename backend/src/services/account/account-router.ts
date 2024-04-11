@@ -195,6 +195,74 @@ accountRouter.post("/create-ticket", async (req: Request, res: Response, next: N
     }
 
     return res.status(StatusCode.SuccessOK).json({ success: true, message: "created ticket" });
+  
+// GET asks for a given account for a given event
+accountRouter.get("/userask/:event_id/:profile_id", async (req: Request, res: Response, next: NextFunction) => {
+    // const profileId = req.query.id as string | undefined;
+    const eventIdStr: string = req.params.event_id;
+
+    const profileId: string = req.params.profile_id;
+
+    if (!eventIdStr) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "event_id URL parameter required"));
+    }
+
+    const eventId = Number(eventIdStr);
+
+    if (!profileId) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
+    }
+
+    const ask = await prisma.ask.findUnique({
+        where: {
+            owner_id_event_id: {
+                event_id: eventId,
+                owner_id: Number(profileId),
+            },
+        },
+    });
+
+    let askPriceResponse = -1;
+
+    if (ask) {
+        askPriceResponse = Number(ask.price);
+    }
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, CurrentAsk: askPriceResponse });
+});
+
+accountRouter.get("/userbid/:event_id/:profile_id", async (req: Request, res: Response, next: NextFunction) => {
+    // const profileId = req.query.id as string | undefined;
+    const eventIdStr: string = req.params.event_id;
+
+    const profileId: string = req.params.profile_id;
+
+    if (!eventIdStr) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "event_id URL parameter required"));
+    }
+
+    const eventId = Number(eventIdStr);
+
+    if (!profileId) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
+    }
+
+    const bid = await prisma.bid.findUnique({
+        where: {
+            owner_id_event_id: {
+                event_id: eventId,
+                owner_id: Number(profileId),
+            },
+        },
+    });
+
+    let bidPriceResponse = -1;
+
+    if (bid) {
+        bidPriceResponse = Number(bid.price);
+    }
+
+    return res.status(StatusCode.SuccessOK).json({ success: true, CurrentBid: bidPriceResponse });
 });
 
 export default accountRouter;

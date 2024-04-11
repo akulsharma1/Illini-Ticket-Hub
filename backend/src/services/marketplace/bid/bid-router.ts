@@ -149,4 +149,16 @@ bidRouter.post("/create", async (req: Request, res: Response, next: NextFunction
      */
 });
 
+bidRouter.post("/userBidExists", async (req: Request, res: Response, next: NextFunction) => {
+    const bid: Bid = req.body as Bid;
+    try {
+        const bidExists = await checkIfBidExists(bid);
+        // Directly return a simple JSON object with the boolean value
+        res.json({ exists: bidExists });
+    } catch (error) {
+        // If there's an error, forward it to the error handling middleware
+        next(error);
+    }
+});
+
 export default bidRouter;
