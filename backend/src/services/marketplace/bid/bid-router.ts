@@ -77,7 +77,7 @@ bidRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) 
 
     if (!lowestAsk || lowestAsk.price > updatedBid.price) {
         // is fine, just don't do a transfer
-        return res.status(StatusCode.SuccessOK).json({ success: true, message: "placed bid" });
+        return res.status(StatusCode.SuccessOK).json({ success: true, message: "edited bid" });
     }
 
     await matchBidAndAsk(updatedBid, lowestAsk)
@@ -127,9 +127,17 @@ bidRouter.post("/create", async (req: Request, res: Response, next: NextFunction
 
     const lowestAsk = await findLowestAsk(resp);
 
-    if (!lowestAsk || lowestAsk.price > resp.price) {
+    const lowestAskPrice = Number(lowestAsk.price);
+    const respPrice = Number(resp.price);
+
+    if (!lowestAsk || lowestAskPrice > respPrice) {
         // is fine, just don't do a transfer
-        return res.status(StatusCode.SuccessOK).json({ success: true, message: "placed bid" });
+        return res.status(StatusCode.SuccessOK).json({
+            success: true,
+            message: "placed bid",
+            lowestAskPrice: lowestAsk ? lowestAsk.price : "No asks available",
+            respPrice: resp.price
+        });
     }
 
     await matchBidAndAsk(resp, lowestAsk)
@@ -147,18 +155,6 @@ bidRouter.post("/create", async (req: Request, res: Response, next: NextFunction
      * Even if there are multiple asks/bids with the same price it still won't execute the transaction
      * Potential fix: Asynchronous thread running every x seconds to match bids/asks.
      */
-});
-
-bidRouter.post("/userBidExists", async (req: Request, res: Response, next: NextFunction) => {
-    const bid: Bid = req.body as Bid;
-    try {
-        const bidExists = await checkIfBidExists(bid);
-        // Directly return a simple JSON object with the boolean value
-        res.json({ exists: bidExists });
-    } catch (error) {
-        // If there's an error, forward it to the error handling middleware
-        next(error);
-    }
 });
 
 export default bidRouter;

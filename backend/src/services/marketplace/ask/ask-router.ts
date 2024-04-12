@@ -114,18 +114,6 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
      */
 });
 
-askRouter.post("/userAskExists", async (req: Request, res: Response, next: NextFunction) => {
-    const ask: Ask = req.body as Ask;
-    try {
-        const askExists = await checkIfAskExists(ask);
-        // Directly return a simple JSON object with the boolean value
-        res.json({ exists: askExists });
-    } catch (error) {
-        // If there's an error, forward it to the error handling middleware
-        next(error);
-    }
-});
-
 // askRouter.get("/askforevent/:event_id/:profile_id", async (req: Request, res: Response, next: NextFunction) => {
 //     const ask: Ask = req.body as Ask;
 //     const eventIdStr: string = req.params.event_id;

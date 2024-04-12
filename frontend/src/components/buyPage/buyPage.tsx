@@ -23,6 +23,7 @@ const BuyPage: React.FC = () => {
   const [topPrices, setTopPrices] = useState<TopPrices | null>(null);
   const [bidPrice, setBidPrice] = useState<number>(-1); // Initialize with a default value (-1 or any appropriate default value)
   const [isBidModalOpen, setIsBidModalOpen] = useState(false); // State to control modal visibility
+  const [isEditBidModalOpen, setIsEditBidModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async (eventId: number) => {
@@ -38,7 +39,9 @@ const BuyPage: React.FC = () => {
         setLowestAsk(eventData.lowest_ask);
         setHighestBid(eventData.highest_bid);
 
-        const topPricesResponse = await fetch(`http://localhost:5555/events/prices/top/${eventId}`);
+        const topPricesResponse = await fetch(
+          `http://localhost:5555/events/prices/top/${eventId}`
+        );
         if (!topPricesResponse.ok) {
           throw new Error("Failed to fetch top prices");
         }
@@ -48,8 +51,6 @@ const BuyPage: React.FC = () => {
           top_5_highest_bids: topPricesData.top_5_highest_bids,
         });
 
-
-
         const userProfile = localStorage.getItem("userProfile");
         if (!userProfile) {
           console.error("User profile not found in local storage");
@@ -57,9 +58,11 @@ const BuyPage: React.FC = () => {
         }
         const ownerId = JSON.parse(userProfile).account_id;
 
-        const bidResponse = await fetch(`http://localhost:5555/account/userbid/${eventId}/${ownerId}`);
+        const bidResponse = await fetch(
+          `http://localhost:5555/account/userbid/${eventId}/${ownerId}`
+        );
         if (!bidResponse.ok) {
-          throw new Error("Failed to fetch bid price"); 
+          throw new Error("Failed to fetch bid price");
         }
         const bidData = await bidResponse.json();
         console.log(bidData);
@@ -67,7 +70,6 @@ const BuyPage: React.FC = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
     };
 
     const storedEvent = localStorage.getItem("currEvent");
@@ -115,8 +117,8 @@ const BuyPage: React.FC = () => {
     if (!prices || prices.length === 0) {
       return "N/A";
     }
-    
-    const formattedPrices = prices.map(price => `$${price.toFixed(2)}`);
+
+    const formattedPrices = prices.map((price) => `$${price.toFixed(2)}`);
     return formattedPrices.join(", ");
   };
 
@@ -151,6 +153,38 @@ const BuyPage: React.FC = () => {
     }
   };
 
+  const handleEditBid = async (newBidValue: number) => {
+    try {
+      const userProfile = localStorage.getItem("userProfile");
+      if (!userProfile) {
+        console.error("User profile not found in local storage");
+        return;
+      }
+      const ownerId = JSON.parse(userProfile).account_id;
+
+      const response = await fetch("http://localhost:5555/bids/edit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: newBidValue,
+          event_id: event?.event_id,
+          owner_id: ownerId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create bid");
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+
+      setIsEditBidModalOpen(false); // Close modal on success
+    } catch (error) {
+      console.error("Error updating bid:", error);
+    }
+  };
+
   if (!event) {
     return <div>Event not found</div>;
   }
@@ -179,9 +213,16 @@ const BuyPage: React.FC = () => {
               <h2 className="card-title">Top 5 Highest Bids and Lowest Asks</h2>
             </div>
             <div className="card-content">
-            <p>Top 5 Lowest Asks: {formatPrices(topPrices.top_5_lowest_asks)}</p>
-            <p>Top 5 Highest Bids: {formatPrices(topPrices.top_5_highest_bids)}</p>
-            <p>Your Current Bid: {bidPrice !== -1 ? `$${bidPrice.toFixed(2)}` : "N/A"}</p>
+              <p>
+                Top 5 Lowest Asks: {formatPrices(topPrices.top_5_lowest_asks)}
+              </p>
+              <p>
+                Top 5 Highest Bids: {formatPrices(topPrices.top_5_highest_bids)}
+              </p>
+              <p>
+                Your Current Bid:{" "}
+                {bidPrice !== -1 ? `$${bidPrice.toFixed(2)}` : "N/A"}
+              </p>
             </div>
           </div>
         )}
@@ -196,14 +237,26 @@ const BuyPage: React.FC = () => {
               <br />
               Lowest Ask: {lowestAsk}
             </button>
-            <button
-              className="bid-button"
-              onClick={() => setIsBidModalOpen(true)}
-            >
-              Place New Bid
-              <br />
-              Highest Bid: {highestBid}
-            </button>
+            {bidPrice === -1 ? (
+              <button
+                className="bid-button"
+                onClick={() => setIsBidModalOpen(true)}
+              >
+                Place New Bid
+                <br />
+                Lowest Ask:{" "}
+                {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
+              </button>
+            ) : (
+              <button
+                className="bid-button"
+                onClick={() => setIsEditBidModalOpen(true)}
+              >
+                Edit Bid
+                <br />
+                Current Bid: {`$${bidPrice.toFixed(2)}`}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -211,6 +264,13 @@ const BuyPage: React.FC = () => {
         isOpen={isBidModalOpen}
         onClose={() => setIsBidModalOpen(false)}
         onSubmit={handlePlaceNewBid}
+        bidPrice={0}
+      />
+      <EditBidModal
+        isOpen={isEditBidModalOpen}
+        onClose={() => setIsEditBidModalOpen(false)}
+        onSubmit={handleEditBid}
+        bidPrice={bidPrice} // Pass bidPrice as a prop
       />
     </div>
   );
@@ -220,6 +280,7 @@ interface BidModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (bidValue: number) => void;
+  bidPrice: number; // Add bidPrice here
 }
 
 const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -251,6 +312,48 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, onSubmit }) => {
       </div>
     </div>
   );
+};
+
+const EditBidModal: React.FC<BidModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  bidPrice,
+}) => {
+  const [editBidValue, setEditBidValue] = useState("");
+
+  useEffect(() => {
+    // Set initial value to current bid when modal opens
+    if (isOpen && bidPrice !== -1) {
+      setEditBidValue(bidPrice.toString());
+    }
+  }, [isOpen, bidPrice]);
+
+  const handleSubmit = () => {
+    const value = parseFloat(editBidValue);
+    if (!isNaN(value) && value > 0) {
+      onSubmit(value);
+      onClose(); // Close modal after submitting
+    }
+  };
+
+  return isOpen ? (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>
+          &times;
+        </span>
+        <h2>Edit Your Bid</h2>
+        <input
+          type="number"
+          value={editBidValue}
+          onChange={(e) => setEditBidValue(e.target.value)}
+          placeholder="Enter new bid amount"
+        />
+        <button onClick={handleSubmit}>Update Bid</button>
+      </div>
+    </div>
+  ) : null;
 };
 
 export default BuyPage;
