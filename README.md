@@ -13,7 +13,12 @@ Week 7 Progress:
     
   Adrian:
   
-    - C
+    - Wrote backend APIs to edit a user's ask, remove a user's ask, edit a user's bid, remove a user's bid
+    - Fixed bugs in existing backend APIs
+      - fixed bug where we were comparing strings rather than integers, resulting in unexpected behavior
+      - fixed logic error in a conditional block which checked if a ticket could be transferred
+    - added an edit bid and edit ask modal on the frontend
+    - added conditional rendering to the remove bid/ask and buy/sell now buttons
 
     
   Ritam: 
