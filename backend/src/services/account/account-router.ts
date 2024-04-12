@@ -152,6 +152,48 @@ accountRouter.get("/bids", async (req: Request, res: Response, next: NextFunctio
     return res.status(StatusCode.SuccessOK).json({ success: true, bids: bids, count: count });
 });
 
+// GET bids of a specific user with associated events
+accountRouter.get("/bidswithevents", async (req: Request, res: Response, next: NextFunction) => {
+    const profileId = req.query.id as string | undefined;
+
+    if (!profileId) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "profile id query parameter required"));
+    }
+
+    try {
+        // Fetch all bids of the specified user along with associated events
+        const bidsWithEvents = await prisma.bid.findMany({
+            where: { owner_id: Number(profileId) },
+            include: {
+                event: true // Include the associated event for each bid
+            },
+            orderBy: { created_at: 'desc' } 
+        });
+
+        // Format the response to include bid details and associated event details
+        const formattedBidsWithEvents = bidsWithEvents.map(bid => ({
+            eventId: bid.event_id,
+            event: {
+                eventId: bid.event.event_id,
+                eventType: bid.event.event_type,
+                awayTeam: bid.event.away_team,
+                eventStart: bid.event.event_start,
+                salesEnabled: bid.event.sales_enabled,
+                stadiumLocation: bid.event.stadium_location
+            },
+            price: bid.price,
+            createdAt: bid.created_at
+        }));
+
+        const count = formattedBidsWithEvents.length;
+
+        return res.status(StatusCode.SuccessOK).json({ success: true, bidsWithEvents: formattedBidsWithEvents, count });
+    } catch (error) {
+        console.error("Error fetching bids with events:", error);
+        return next(new RouterError(StatusCode.ServerErrorInternal, "Failed to fetch bids with events"));
+    }
+});
+
 // GET asks for a given account
 accountRouter.get("/asks", async (req: Request, res: Response, next: NextFunction) => {
     const profileId = req.query.id as string | undefined;
