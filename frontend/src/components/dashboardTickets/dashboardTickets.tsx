@@ -31,10 +31,12 @@ interface Event {
 // Ticket card
 const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
   const [event, setEvent] = useState<Event | null>(null);
+  const [askPrice, setAskPrice] = useState<number>(-1); // Initialize with a default value (-1 or any appropriate default value)
+
   console.log("In Ticket Card");
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchEventAndAskPrice = async () => {
       try {
         // Fetch event details, lowest ask, and highest bid
         const eventResponse = await fetch(
@@ -45,12 +47,18 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
         }
         const eventData = await eventResponse.json();
         setEvent(eventData.event);
+        const askResponse = await fetch(`http://localhost:5555/account/userask/${ticket.event_id}/${ticket.owner_id}`);
+        if (!askResponse.ok) {
+          throw new Error("Failed to fetch ask price");
+        }
+        const askData = await askResponse.json();
+        setAskPrice(askData.CurrentAsk); // Assuming `CurrentBid` is the key for ask price in the response
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
-  }, []);
+    fetchEventAndAskPrice();
+  }, [ticket.event_id, ticket.owner_id]);
 
   if (!event) {
     return <div></div>;
@@ -59,15 +67,6 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
   const formattedDate = event.event_start
     ? new Date(event.event_start).toLocaleDateString()
     : "";
-
-  // return (
-  //   <div className="ticket-card">
-  //     <strong className="event">Event ID: {ticket.event_id}</strong>
-  //     <span className={ticket.listed ? "listed" : "unlisted"}>
-  //       {ticket.listed ? "Listed" : "Unlisted"}
-  //     </span>
-  //   </div>
-  // );
 
   return (
     <div className="ticket-card">
@@ -78,7 +77,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
         <p className="event-date">Date: {formattedDate}</p>
       </div>
       <span className={ticket.listed ? "listed" : "unlisted"}>
-        {ticket.listed ? "Listed" : "Unlisted"}
+        {ticket.listed ? `Listed at $${askPrice.toFixed(2)}` : "Unlisted"}
       </span>
     </div>
   );
@@ -94,7 +93,7 @@ const DashboardTickets: React.FC = () => {
   const st = localStorage.getItem("userProfile");
 
   if (!st) {
-    throw new Error("feafaeio");
+    throw new Error("User profile not found in local storage");
   } else {
     profile = JSON.parse(st) as Account;
   }
@@ -120,6 +119,11 @@ const DashboardTickets: React.FC = () => {
         }));
         setTickets(tickets);
         setLoading(false);
+
+
+        
+        
+
       } catch (error) {
         setError((error as Error).toString());
         setLoading(false);

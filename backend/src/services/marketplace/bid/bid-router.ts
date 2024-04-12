@@ -75,10 +75,7 @@ bidRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) 
 
     const lowestAsk = await findLowestAsk(updatedBid);
 
-    const lowestAskPrice = Number(lowestAsk.price);
-    const respPrice = Number(updatedBid.price);
-
-    if (!lowestAsk || lowestAskPrice > respPrice) {
+    if (!lowestAsk || Number(lowestAsk.price) > Number(updatedBid.price)) {
         // is fine, just don't do a transfer
         return res.status(StatusCode.SuccessOK).json({ success: true, message: "edited bid" });
     }
@@ -130,16 +127,13 @@ bidRouter.post("/create", async (req: Request, res: Response, next: NextFunction
 
     const lowestAsk = await findLowestAsk(resp);
 
-    const lowestAskPrice = Number(lowestAsk.price);
-    const respPrice = Number(resp.price);
-
-    if (!lowestAsk || lowestAskPrice > respPrice) {
+    if (!lowestAsk || Number(lowestAsk.price) > Number(resp.price)) {
         // is fine, just don't do a transfer
         return res.status(StatusCode.SuccessOK).json({
             success: true,
             message: "placed bid",
             lowestAskPrice: lowestAsk ? lowestAsk.price : "No asks available",
-            respPrice: resp.price
+            respPrice: resp.price,
         });
     }
 
