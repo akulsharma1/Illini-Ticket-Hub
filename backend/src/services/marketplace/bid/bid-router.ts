@@ -75,7 +75,10 @@ bidRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) 
 
     const lowestAsk = await findLowestAsk(updatedBid);
 
-    if (!lowestAsk || lowestAsk.price > updatedBid.price) {
+    const lowestAskPrice = Number(lowestAsk.price);
+    const respPrice = Number(updatedBid.price);
+
+    if (!lowestAsk || lowestAskPrice > respPrice) {
         // is fine, just don't do a transfer
         return res.status(StatusCode.SuccessOK).json({ success: true, message: "edited bid" });
     }
