@@ -16,7 +16,6 @@ interface TopPrices {
 }
 
 const BuyPage: React.FC = () => {
-  const { eventId } = useParams<{ eventId: string }>();
   const [event, setEvent] = useState<Event | null>(null);
   const [lowestAsk, setLowestAsk] = useState<number>(-1);
   const [highestBid, setHighestBid] = useState<number>(-1);
@@ -185,6 +184,44 @@ const BuyPage: React.FC = () => {
     }
   };
 
+  const handleRemoveBid = async () => {
+    if (bidPrice === -1) {
+      console.error("No bid to remove");
+      return; // Early exit if no bid is present
+    }
+
+    const userProfile = localStorage.getItem("userProfile");
+    if (!userProfile) {
+      console.error("User profile not found in local storage");
+      return;
+    }
+    const ownerId = JSON.parse(userProfile).account_id;
+
+    try {
+      const response = await fetch(`http://localhost:5555/bids/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: bidPrice,
+          event_id: event?.event_id,
+          owner_id: ownerId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete bid");
+      }
+
+      const responseData = await response.json();
+      console.log("Bid removed:", responseData);
+      setBidPrice(-1); // Reset bid price indicating no current bid
+    } catch (error) {
+      console.error("Error removing bid:", error);
+    }
+  };
+
   if (!event) {
     return <div>Event not found</div>;
   }
@@ -232,11 +269,13 @@ const BuyPage: React.FC = () => {
             <h2 className="card-title">Buy</h2>
           </div>
           <div className="button-container">
-            <button className="buy-button" onClick={handleBuyLowest}>
+            <button
+              className={`buy-button ${bidPrice != -1 ? "disabled" : ""}`} // @TODO: add another check here for if the user owns ticket
+              onClick={handleBuyLowest}
+            >
               Buy Now
               <br />
-              Lowest Ask:{" "}
-              {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
+              Lowest Ask: {lowestAsk}
             </button>
             {bidPrice === -1 ? (
               <button
@@ -245,8 +284,8 @@ const BuyPage: React.FC = () => {
               >
                 Place New Bid
                 <br />
-                Highest Bid:{" "}
-                {highestBid !== -1 ? `$${highestBid.toFixed(2)}` : "N/A"}
+                Lowest Ask:{" "}
+                {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
               </button>
             ) : (
               <button
@@ -258,6 +297,15 @@ const BuyPage: React.FC = () => {
                 Current Bid: {`$${bidPrice.toFixed(2)}`}
               </button>
             )}
+            <button
+              className={`remove-bid-button ${
+                bidPrice === -1 ? "disabled" : ""
+              }`}
+              onClick={handleRemoveBid}
+              disabled={bidPrice === -1}
+            >
+              Remove Bid
+            </button>
           </div>
         </div>
       </div>
