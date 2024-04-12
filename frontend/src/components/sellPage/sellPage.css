@@ -52,6 +52,16 @@
   margin-top: 20px;
 }
 
+.button-container .remove-ask-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.button-container .sell-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .button-container .ask-button {
   padding: 8px 12px;
   width: 150px;
@@ -67,6 +77,17 @@
   padding: 8px 12px;
   width: 150px;
   background-color: #800080;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-container .remove-ask-button {
+  padding: 8px 12px;
+  width: 150px;
+  background-color: #b90d0d;
   color: white;
   border: none;
   border-radius: 5px;
