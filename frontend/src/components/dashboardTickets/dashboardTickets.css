@@ -52,7 +52,13 @@
     font-size:medium;
 }
 
-.ticket-card .listed,
+.ticket-card .listed {
+    font-size: 30px;
+    position: absolute;
+    transform: translateY(-100%);
+    right: 20px;
+}
+
 .ticket-card .unlisted {
     font-size: 30px;
     position: absolute;

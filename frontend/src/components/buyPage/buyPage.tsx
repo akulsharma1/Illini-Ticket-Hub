@@ -235,7 +235,8 @@ const BuyPage: React.FC = () => {
             <button className="buy-button" onClick={handleBuyLowest}>
               Buy Now
               <br />
-              Lowest Ask: {lowestAsk}
+              Lowest Ask:{" "}
+              {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
             </button>
             {bidPrice === -1 ? (
               <button
@@ -244,8 +245,8 @@ const BuyPage: React.FC = () => {
               >
                 Place New Bid
                 <br />
-                Lowest Ask:{" "}
-                {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
+                Highest Bid:{" "}
+                {highestBid !== -1 ? `$${highestBid.toFixed(2)}` : "N/A"}
               </button>
             ) : (
               <button
