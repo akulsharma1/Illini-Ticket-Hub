@@ -1,14 +1,25 @@
-.ticket-list {
+body {
+    overflow-x: hidden;
+} 
+ 
+ .ticket-list {
     display: flex;
     flex-direction: column;
     width: 80%;
     height: auto;
     padding: 40px;
     overflow-y: auto;
-    position: fixed;
+    position: relative;
     left: 30%;
     top: 5%;
 }
+
+.ticket-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 
 .ticket-heading {
     font-size: 50px;
@@ -17,11 +28,7 @@
     top: -20px;
 }
 
-.ticket-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
+
 
 .ticket-card {
     background-color: white;
