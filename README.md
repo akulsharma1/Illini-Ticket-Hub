@@ -5,6 +5,30 @@
 - Once set up, do `yarn start` in `backend` and `yarn start` in `frontend` in order to start both the backend and frontend.
 - Visit http://localhost:3000 to view the frontend. It automatically connects to the backend.
 
+Week 7 Progress:
+
+  Aaron:
+  
+    - C
+    
+  Adrian:
+  
+    - C
+
+    
+  Ritam: 
+  
+    - Wrote backend APIs to get a user's current ask or bid for a specific event
+    - Implemented displaying this current ask or bid for each event's respective buy or sell page
+    - On dashboard, for a given ticket a user owns, if it is listed, it now displays the price it is listed at
+    - Fixed dashboard problem we've had regarding not being able to scroll, sorted tickets on dashboard by whether listed or not
+    - Other misc frontend user experience / design improvements
+
+  
+  Akul: 
+  
+    - A
+
 Week 6 Progress:
 
   Aaron:
