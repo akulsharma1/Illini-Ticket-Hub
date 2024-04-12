@@ -1,3 +1,5 @@
+// dashboardTickets.tsx
+
 import React, { useState, useEffect } from "react";
 import "./dashboardTickets.css";
 
@@ -7,7 +9,6 @@ interface Account {
   name: string;
 }
 
-// Ticket has values, owner_id, event_id, used, listed, and created_at
 interface Ticket {
   owner_id: number;
   event_id: number;
@@ -28,31 +29,26 @@ interface Event {
   stadium_location: string;
 }
 
-// Ticket card
 const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
   const [event, setEvent] = useState<Event | null>(null);
-  const [askPrice, setAskPrice] = useState<number>(-1); // Initialize with a default value (-1 or any appropriate default value)
-
-  console.log("In Ticket Card");
+  const [askPrice, setAskPrice] = useState<number>(-1);
 
   useEffect(() => {
     const fetchEventAndAskPrice = async () => {
       try {
-        // Fetch event details, lowest ask, and highest bid
-        const eventResponse = await fetch(
-          `http://localhost:5555/events/prices/${ticket.event_id}`
-        );
+        const eventResponse = await fetch(`http://localhost:5555/events/prices/${ticket.event_id}`);
         if (!eventResponse.ok) {
           throw new Error("Failed to fetch event data");
         }
         const eventData = await eventResponse.json();
         setEvent(eventData.event);
+
         const askResponse = await fetch(`http://localhost:5555/account/userask/${ticket.event_id}/${ticket.owner_id}`);
         if (!askResponse.ok) {
           throw new Error("Failed to fetch ask price");
         }
         const askData = await askResponse.json();
-        setAskPrice(askData.CurrentAsk); // Assuming `CurrentBid` is the key for ask price in the response
+        setAskPrice(askData.CurrentAsk);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -84,46 +80,34 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticket }) => {
 };
 
 const DashboardTickets: React.FC = () => {
-  // States for tickets, error, and loading
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const profile: Account = JSON.parse(localStorage.getItem("userProfile") || "");
 
-  let profile: Account;
-  const st = localStorage.getItem("userProfile");
-
-  if (!st) {
-    throw new Error("User profile not found in local storage");
-  } else {
-    profile = JSON.parse(st) as Account;
-  }
-
-  // Retrieves tickets from backend and stores them in tickets, handling errors and loading
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5555/account/tickets?id=" + profile.account_id
-        );
+        const response = await fetch(`http://localhost:5555/account/tickets?id=${profile.account_id}`);
         if (!response.ok) {
-          console.log("error fetching data");
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        const tickets: Ticket[] = data.tickets.map((ticketData: any) => ({
+        const fetchedTickets: Ticket[] = data.tickets.map((ticketData: any) => ({
           owner_id: ticketData.owner_id,
           event_id: ticketData.event_id,
           used: ticketData.used,
           listed: ticketData.listed,
           created_at: ticketData.created_at,
         }));
-        setTickets(tickets);
+
+        const listedTickets = fetchedTickets.filter(ticket => ticket.listed);
+        const unlistedTickets = fetchedTickets.filter(ticket => !ticket.listed);
+
+        const sortedTickets = [...listedTickets, ...unlistedTickets];
+
+        setTickets(sortedTickets);
         setLoading(false);
-
-
-        
-        
-
       } catch (error) {
         setError((error as Error).toString());
         setLoading(false);
@@ -131,21 +115,16 @@ const DashboardTickets: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [profile.account_id]);
 
-  // handle loading
   if (loading) {
-    console.log("loading");
-    // return <div>Loading...</div>;
+    return <div>Loading...</div>;
   }
 
-  // handle error
   if (error) {
-    console.error("error found: ", error);
-    // return <div>Error: {error}</div>;
+    return <div>Error: {error}</div>;
   }
 
-  console.log(tickets);
   if (tickets.length === 0) {
     return (
       <div className="ticket-list">
@@ -154,13 +133,12 @@ const DashboardTickets: React.FC = () => {
     );
   }
 
-  // Render ticket list
   return (
     <div className="ticket-list">
       <div className="ticket-heading">Your Tickets</div>
       <div className="ticket-cards">
         {tickets.map((ticket) => (
-          <TicketCard ticket={ticket} />
+          <TicketCard key={ticket.event_id} ticket={ticket} />
         ))}
       </div>
     </div>
