@@ -9,7 +9,10 @@ Week 7 Progress:
 
   Aaron:
   
-    - C
+    - Fixed minor bug with sign out button not working completely
+    - Wrote backend API to add a ticket to a users account
+    - Added frontend button and pop up menu for users to add tickets
+      - Added check to ensure no double tickets
     
   Adrian:
   
