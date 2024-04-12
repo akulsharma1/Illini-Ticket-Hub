@@ -92,7 +92,10 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
     // TODO: handle bid/ask matching
     const highestBid = await findHighestBid(resp);
 
-    if (!highestBid || highestBid.price < resp.price) {
+    const highestBidPrice = Number(highestBid.price);
+    const respPrice = Number(resp.price);
+
+    if (!highestBid || highestBidPrice < respPrice) {
         // is fine, just don't do a transfer
         return res.status(StatusCode.SuccessOK).json({ success: true, message: "placed ask" });
     }
@@ -112,18 +115,6 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
      * Even if there are multiple asks/bids with the same price it still won't execute the transaction
      * Potential fix: Asynchronous thread running every x seconds to match bids/asks.
      */
-});
-
-askRouter.post("/userAskExists", async (req: Request, res: Response, next: NextFunction) => {
-    const ask: Ask = req.body as Ask;
-    try {
-        const askExists = await checkIfAskExists(ask);
-        // Directly return a simple JSON object with the boolean value
-        res.json({ exists: askExists });
-    } catch (error) {
-        // If there's an error, forward it to the error handling middleware
-        next(error);
-    }
 });
 
 // askRouter.get("/askforevent/:event_id/:profile_id", async (req: Request, res: Response, next: NextFunction) => {
