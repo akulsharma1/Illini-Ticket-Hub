@@ -23,11 +23,11 @@ const SellPage: React.FC = () => {
   const [topPrices, setTopPrices] = useState<TopPrices | null>(null);
   const [askPrice, setAskPrice] = useState<number>(-1); // Initialize with a default value (-1 or any appropriate default value)
   const [isAskModalOpen, setIsAskModalOpen] = useState(false); // State to control modal visibility
+  const [isEditAskModalOpen, setIsEditAskModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async (eventId: number) => {
       try {
-
         const response = await fetch(
           `http://localhost:5555/events/prices/${eventId}`
         );
@@ -50,8 +50,6 @@ const SellPage: React.FC = () => {
           top_5_lowest_asks: topPricesData.top_5_lowest_asks,
           top_5_highest_bids: topPricesData.top_5_highest_bids,
         });
-        
-        
 
         const userProfile = localStorage.getItem("userProfile");
         if (!userProfile) {
@@ -60,9 +58,11 @@ const SellPage: React.FC = () => {
         }
         const ownerId = JSON.parse(userProfile).account_id;
 
-        const askResponse = await fetch(`http://localhost:5555/account/userask/${eventId}/${ownerId}`);
+        const askResponse = await fetch(
+          `http://localhost:5555/account/userask/${eventId}/${ownerId}`
+        );
         if (!askResponse.ok) {
-          throw new Error("Failed to fetch ask price"); 
+          throw new Error("Failed to fetch ask price");
         }
         const askData = await askResponse.json();
         console.log(askData);
@@ -70,7 +70,6 @@ const SellPage: React.FC = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
     };
 
     const storedEvent = localStorage.getItem("currEvent");
@@ -82,12 +81,10 @@ const SellPage: React.FC = () => {
     } else {
       console.error("Event not found in local storage");
     }
-
-    
   }, []);
 
-  // Function to handle "Buy Now Lowest Ask"
-  const handleAskHighest = async () => {
+  // Function to handle "Sell Now Highest Ask"
+  const handleSellHighest = async () => {
     try {
       const userProfile = localStorage.getItem("userProfile");
       if (!userProfile) {
@@ -121,11 +118,10 @@ const SellPage: React.FC = () => {
     if (!prices || prices.length === 0) {
       return "N/A";
     }
-    
-    const formattedPrices = prices.map(price => `$${price.toFixed(2)}`);
+
+    const formattedPrices = prices.map((price) => `$${price.toFixed(2)}`);
     return formattedPrices.join(", ");
   };
-  
 
   const handlePlaceNewAsk = async (askValue: number) => {
     setIsAskModalOpen(false);
@@ -158,6 +154,77 @@ const SellPage: React.FC = () => {
     }
   };
 
+  const handleEditAsk = async (newAskValue: number) => {
+    try {
+      // fetch user info from local store
+      const userProfile = localStorage.getItem("userProfile");
+      if (!userProfile) {
+        console.error("User profile not found in local storage");
+        return;
+      }
+      const ownerId = JSON.parse(userProfile).account_id;
+
+      const response = await fetch("http://localhost:5555/asks/edit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: newAskValue,
+          event_id: event?.event_id,
+          owner_id: ownerId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create ask");
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+
+      setIsEditAskModalOpen(false); // Close modal on success
+    } catch (error) {
+      console.error("Error updating ask:", error);
+    }
+  };
+
+  const handleRemoveAsk = async () => {
+    if (askPrice === -1) {
+      console.error("No ask to remove");
+      return; // Early exit if no ask is present
+    }
+
+    const userProfile = localStorage.getItem("userProfile");
+    if (!userProfile) {
+      console.error("User profile not found in local storage");
+      return;
+    }
+    const ownerId = JSON.parse(userProfile).account_id;
+
+    try {
+      const response = await fetch(`http://localhost:5555/asks/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: askPrice,
+          event_id: event?.event_id,
+          owner_id: ownerId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete ask");
+      }
+
+      const responseData = await response.json();
+      console.log("Ask removed:", responseData);
+      setAskPrice(-1); // Reset ask price indicating no current ask
+    } catch (error) {
+      console.error("Error removing ask:", error);
+    }
+  };
+
   if (!event) {
     return <div>Event not found</div>;
   }
@@ -186,9 +253,16 @@ const SellPage: React.FC = () => {
               <h2 className="card-title">Top 5 Highest Bids and Lowest Asks</h2>
             </div>
             <div className="card-content">
-            <p>Top 5 Lowest Asks: {formatPrices(topPrices.top_5_lowest_asks)}</p>
-            <p>Top 5 Highest Bids: {formatPrices(topPrices.top_5_highest_bids)}</p>
-            <p>Your Current Ask: {askPrice !== -1 ? `$${askPrice.toFixed(2)}` : "N/A"}</p>
+              <p>
+                Top 5 Lowest Asks: {formatPrices(topPrices.top_5_lowest_asks)}
+              </p>
+              <p>
+                Top 5 Highest Bids: {formatPrices(topPrices.top_5_highest_bids)}
+              </p>
+              <p>
+                Your Current Ask:{" "}
+                {askPrice !== -1 ? `$${askPrice.toFixed(2)}` : "N/A"}
+              </p>
             </div>
           </div>
         )}
@@ -198,20 +272,43 @@ const SellPage: React.FC = () => {
             <h2 className="card-title">Sell</h2>
           </div>
           <div className="button-container">
-            <button className="sell-button" onClick={handleAskHighest}>
+            <button
+              className={`sell-button ${askPrice != -1 ? "disabled" : ""}`} // @TODO: add another check here for if the user owns ticket
+              onClick={handleSellHighest}
+            >
               Sell Now
               <br />
               Highest Bid:{" "}
-                {highestBid !== -1 ? `$${highestBid.toFixed(2)}` : "N/A"}
+              {highestBid !== -1 ? `$${highestBid.toFixed(2)}` : "N/A"}
             </button>
+            {askPrice === -1 ? (
+              <button
+                className="ask-button"
+                onClick={() => setIsAskModalOpen(true)}
+              >
+                Place New Ask
+                <br />
+                Lowest Ask:{" "}
+                {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
+              </button>
+            ) : (
+              <button
+                className="ask-button"
+                onClick={() => setIsEditAskModalOpen(true)}
+              >
+                Edit Ask
+                <br />
+                Current Ask: {`$${askPrice.toFixed(2)}`}
+              </button>
+            )}
             <button
-              className="ask-button"
-              onClick={() => setIsAskModalOpen(true)}
+              className={`remove-ask-button ${
+                askPrice === -1 ? "disabled" : ""
+              }`}
+              onClick={handleRemoveAsk}
+              disabled={askPrice === -1}
             >
-              Place New Ask
-              <br />
-              Lowest Ask:{" "}
-              {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
+              Remove Ask
             </button>
           </div>
         </div>
@@ -220,6 +317,13 @@ const SellPage: React.FC = () => {
         isOpen={isAskModalOpen}
         onClose={() => setIsAskModalOpen(false)}
         onSubmit={handlePlaceNewAsk}
+        askPrice={0}
+      />
+      <EditAskModal
+        isOpen={isEditAskModalOpen}
+        onClose={() => setIsEditAskModalOpen(false)}
+        onSubmit={handleEditAsk}
+        askPrice={askPrice} // Pass askPrice as a prop
       />
     </div>
   );
@@ -229,6 +333,7 @@ interface AskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (askValue: number) => void;
+  askPrice: number;
 }
 
 const AskModal: React.FC<AskModalProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -260,6 +365,48 @@ const AskModal: React.FC<AskModalProps> = ({ isOpen, onClose, onSubmit }) => {
       </div>
     </div>
   );
+};
+
+const EditAskModal: React.FC<AskModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  askPrice,
+}) => {
+  const [editAskValue, setEditAskValue] = useState("");
+
+  useEffect(() => {
+    // Set initial value to current ask when modal opens
+    if (isOpen && askPrice !== -1) {
+      setEditAskValue(askPrice.toString());
+    }
+  }, [isOpen, askPrice]);
+
+  const handleSubmit = () => {
+    const value = parseFloat(editAskValue);
+    if (!isNaN(value) && value > 0) {
+      onSubmit(value);
+      onClose(); // Close modal after submitting
+    }
+  };
+
+  return isOpen ? (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>
+          &times;
+        </span>
+        <h2>Edit Your Ask</h2>
+        <input
+          type="number"
+          value={editAskValue}
+          onChange={(e) => setEditAskValue(e.target.value)}
+          placeholder="Enter new ask amount"
+        />
+        <button onClick={handleSubmit}>Update Ask</button>
+      </div>
+    </div>
+  ) : null;
 };
 
 export default SellPage;
