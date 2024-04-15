@@ -35,7 +35,9 @@ Week 7 Progress:
   
   Akul: 
   
-    - A
+    - Fixed signin bug where backend crashes when an email that doesn't exist is inputted
+    - Added general logic for future POST body type checking & implemented in account
+    - General formatting adjustments
 
 Week 6 Progress:
 
