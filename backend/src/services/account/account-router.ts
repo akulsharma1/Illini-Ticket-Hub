@@ -165,13 +165,13 @@ accountRouter.get("/bidswithevents", async (req: Request, res: Response, next: N
         const bidsWithEvents = await prisma.bid.findMany({
             where: { owner_id: Number(profileId) },
             include: {
-                event: true // Include the associated event for each bid
+                event: true, // Include the associated event for each bid
             },
-            orderBy: { created_at: 'desc' } 
+            orderBy: { created_at: "desc" },
         });
 
         // Format the response to include bid details and associated event details
-        const formattedBidsWithEvents = bidsWithEvents.map(bid => ({
+        const formattedBidsWithEvents = bidsWithEvents.map((bid) => ({
             eventId: bid.event_id,
             event: {
                 eventId: bid.event.event_id,
@@ -179,10 +179,10 @@ accountRouter.get("/bidswithevents", async (req: Request, res: Response, next: N
                 awayTeam: bid.event.away_team,
                 eventStart: bid.event.event_start,
                 salesEnabled: bid.event.sales_enabled,
-                stadiumLocation: bid.event.stadium_location
+                stadiumLocation: bid.event.stadium_location,
             },
             price: bid.price,
-            createdAt: bid.created_at
+            createdAt: bid.created_at,
         }));
 
         const count = formattedBidsWithEvents.length;
@@ -321,6 +321,48 @@ accountRouter.get("/userbid/:event_id/:profile_id", async (req: Request, res: Re
     }
 
     return res.status(StatusCode.SuccessOK).json({ success: true, CurrentBid: bidPriceResponse });
+});
+
+accountRouter.get("/transactions", async (req: Request, res: Response, next: NextFunction) => {
+    const profileId = req.query.id as string | undefined;
+
+    if (!profileId || Number.isNaN(profileId)) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid profile id query param"));
+    }
+    const buyingTransactions = await prisma.transaction.findMany({
+        where: {
+            buyer_id: Number(profileId),
+        },
+        select: {
+            buyer_id: true,
+            created_at: true,
+            price: true,
+        },
+    });
+    const sellingTransactions = await prisma.transaction.findMany({
+        where: {
+            seller_id: Number(profileId),
+        },
+        select: {
+            seller_id: true,
+            created_at: true,
+            price: true,
+        },
+    });
+
+    const buyingTransactionsMapped = buyingTransactions.map((transaction) => ({
+        ...transaction,
+        price: transaction.price.toNumber(), // Converting Decimal to Number
+    }));
+
+    const sellingTransactionsMapped = sellingTransactions.map((transaction) => ({
+        ...transaction,
+        price: transaction.price.toNumber(), // Converting Decimal to Number
+    }));
+
+    return res
+        .status(StatusCode.SuccessOK)
+        .json({ success: true, buying_transactions: buyingTransactionsMapped, selling_transactions: sellingTransactionsMapped });
 });
 
 export default accountRouter;
