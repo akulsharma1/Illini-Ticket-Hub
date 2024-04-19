@@ -103,12 +103,31 @@ const BuyPage: React.FC = () => {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to create bid");
+        const errorData = await response.json(); // Assuming server responds with JSON on error
+        console.error("Failed to create bid", errorData);
+
+        // Check if the specific error about owning a ticket is returned
+        if (
+          response.status === 400 &&
+          errorData.error &&
+          errorData.error.includes(
+            "cannot place bid for ticket when one is already owned"
+          )
+        ) {
+          alert("You cannot buy a ticket, you already own a ticket.");
+        } else {
+          // Generic error message for other issues
+          alert("Failed to buy now: " + (errorData.message || "Unknown error"));
+        }
+
+        return;
       }
       const responseData = await response.json();
       console.log(responseData);
+      alert("The ticket was successfully purchased!");
     } catch (error) {
       console.error("Error creating bid:", error);
+      alert("An error occurred while trying to buy the ticket.");
     }
   };
 
@@ -127,6 +146,7 @@ const BuyPage: React.FC = () => {
       const userProfile = localStorage.getItem("userProfile");
       if (!userProfile) {
         console.error("User profile not found in local storage");
+        alert("You must be logged in to place a bid.");
         return;
       }
       const ownerId = JSON.parse(userProfile).account_id;
@@ -142,13 +162,36 @@ const BuyPage: React.FC = () => {
           owner_id: ownerId,
         }),
       });
+
       if (!response.ok) {
-        throw new Error("Failed to create bid");
+        const errorData = await response.json(); // Assuming server responds with JSON on error
+        console.error("Failed to create bid", errorData);
+
+        // Check if the specific error about owning a ticket is returned
+        if (
+          response.status === 400 &&
+          errorData.error &&
+          errorData.error.includes(
+            "cannot place bid for ticket when one is already owned"
+          )
+        ) {
+          alert("You cannot place a bid, you already own a ticket.");
+        } else {
+          // Generic error message for other issues
+          alert(
+            "Failed to place bid: " + (errorData.message || "Unknown error")
+          );
+        }
+
+        return;
       }
+
       const responseData = await response.json();
-      console.log(responseData);
+      console.log("Bid placed successfully:", responseData);
+      alert("Your bid was successfully placed!");
     } catch (error) {
       console.error("Error creating bid:", error);
+      alert("An error occurred while trying to place the bid.");
     }
   };
 
