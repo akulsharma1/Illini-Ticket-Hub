@@ -105,12 +105,33 @@ const SellPage: React.FC = () => {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to create ask");
+        const errorData = await response.json(); // Assuming server responds with JSON on error
+        console.error("Failed to sell now", errorData);
+
+        // Check if the specific error about owning a ticket is returned
+        if (
+          response.status === 400 &&
+          errorData.error &&
+          errorData.error.includes("must own ticket to place ask")
+        ) {
+          alert(
+            "Failed to sell ticket: You don't own a ticket for this event."
+          );
+        } else {
+          // Generic error message for other issues
+          alert(
+            "Failed to sell now: " + (errorData.message || "Unknown error")
+          );
+        }
+
+        return;
       }
       const responseData = await response.json();
       console.log(responseData);
+      alert("The ticket was successfully sold!");
     } catch (error) {
       console.error("Error creating ask:", error);
+      alert("An error occurred while trying to sell the ticket.");
     }
   };
 
@@ -145,12 +166,31 @@ const SellPage: React.FC = () => {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to create ask");
+        const errorData = await response.json(); // Assuming server responds with JSON on error
+        console.error("Failed to create ask", errorData);
+
+        // Check if the specific error about owning a ticket is returned
+        if (
+          response.status === 400 &&
+          errorData.error &&
+          errorData.error.includes("must own ticket to place ask")
+        ) {
+          alert("Failed to place ask: You don't own a ticket for this event.");
+        } else {
+          // Generic error message for other issues
+          alert(
+            "Failed to place ask: " + (errorData.message || "Unknown error")
+          );
+        }
+
+        return;
       }
       const responseData = await response.json();
       console.log(responseData);
+      alert("Your ask was successfully placed!");
     } catch (error) {
       console.error("Error creating ask:", error);
+      alert("An error occurred while trying to place the ask.");
     }
   };
 
@@ -176,7 +216,7 @@ const SellPage: React.FC = () => {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to create ask");
+        throw new Error("Failed to edit ask");
       }
       const responseData = await response.json();
       console.log(responseData);
