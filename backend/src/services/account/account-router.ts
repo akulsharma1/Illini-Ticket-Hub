@@ -337,6 +337,7 @@ accountRouter.get("/transactions", async (req: Request, res: Response, next: Nex
             buyer_id: true,
             created_at: true,
             price: true,
+            event_id: true,
         },
     });
     const sellingTransactions = await prisma.transaction.findMany({
@@ -347,6 +348,7 @@ accountRouter.get("/transactions", async (req: Request, res: Response, next: Nex
             seller_id: true,
             created_at: true,
             price: true,
+            event_id: true,
         },
     });
 

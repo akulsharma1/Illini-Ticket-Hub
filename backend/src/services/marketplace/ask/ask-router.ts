@@ -7,6 +7,7 @@ import { Ask } from "@prisma/client";
 import { checkIfNewOwnerAlreadyOwnsTicket, matchBidAndAsk } from "../transfer/transfer-helpers";
 import { findHighestBid } from "../bid/bid-helpers";
 import { checkIfAskExists } from "./ask-helpers";
+import { isValidAskFormat } from "./ask-formats";
 
 const askRouter: Router = Router();
 
@@ -91,7 +92,7 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
     const ask: Ask = req.body as Ask;
 
     // TODO: change to new ask format checker
-    if (!ask.price || !ask.event_id || !ask.owner_id) {
+    if (!isValidAskFormat(ask)) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
     }
 
@@ -197,7 +198,9 @@ askRouter.post("/delete", async (req: Request, res: Response, next: NextFunction
             },
         })
         .catch((error) => {
-            return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "error deleting ask", undefined, error.message));
+            return next(
+                new RouterError(StatusCode.ClientErrorPreconditionFailed, "error deleting ask", undefined, error.message),
+            );
         });
 
     if (!updatedAsk) {
@@ -215,12 +218,19 @@ askRouter.post("/delete", async (req: Request, res: Response, next: NextFunction
                 },
             },
             data: {
-                listed: false
-            }
+                listed: false,
+            },
         })
         .catch((error) => {
-            return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "ticket deleted, error setting to unlisted", undefined, error.message));
-        })
+            return next(
+                new RouterError(
+                    StatusCode.ClientErrorPreconditionFailed,
+                    "ticket deleted, error setting to unlisted",
+                    undefined,
+                    error.message,
+                ),
+            );
+        });
 
     if (!updateListStatus) {
         return next(new RouterError(StatusCode.ServerErrorInternal, "ticket deleted, error setting to unlisted"));
@@ -229,7 +239,7 @@ askRouter.post("/delete", async (req: Request, res: Response, next: NextFunction
     // Send a success message
     return res.status(StatusCode.SuccessOK).json({
         success: true,
-        message: "Ask successfully deleted"
+        message: "Ask successfully deleted",
     });
 });
 
