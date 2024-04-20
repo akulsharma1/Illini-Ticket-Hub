@@ -4,6 +4,7 @@ import { NextFunction } from "express-serve-static-core";
 import { RouterError } from "../../middleware/error-handler";
 import StatusCode from "status-code-enum";
 import { Event } from "@prisma/client";
+import { isValidEventFormat } from "./event-formats";
 
 const eventRouter: Router = Router();
 
@@ -156,11 +157,12 @@ eventRouter.get("/prices/:event_id", async (req: Request, res: Response, next: N
 });
 
 eventRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
-    const event: Event = req.body as Event;
+    let event: Event = req.body as Event;
 
-    if (!event.event_start || !event.event_type || !event.stadium_location || !event.away_team) {
+    if (!isValidEventFormat(event)) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
     }
+
     event.sales_enabled = true;
 
     const createdEvent = await prisma.event.create({
@@ -282,5 +284,23 @@ eventRouter.get("/prices/top/:event_id", async (req: Request, res: Response, nex
         return next(new RouterError(StatusCode.ServerErrorInternal, "Internal Server Error"));
     }
 });
+
+eventRouter.get("/transactions/:event_id", async (req: Request, res: Response, next: NextFunction) => {
+    const eventIdStr = req.params.event_id;
+
+    if (!eventIdStr || Number.isNaN(eventIdStr)) {
+        return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid event_id url parameter"));
+    }
+
+    const transactions = await prisma.transaction.findMany({
+        where: {
+            event_id: Number(eventIdStr)
+        },
+        select: {
+            created_at: true,
+            price: true,
+        }
+    })
+})
 
 export default eventRouter;
