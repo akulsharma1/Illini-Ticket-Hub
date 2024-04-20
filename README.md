@@ -5,6 +5,27 @@
 - Once set up, do `yarn start` in `backend` and `yarn start` in `frontend` in order to start both the backend and frontend.
 - Visit http://localhost:3000 to view the frontend. It automatically connects to the backend.
 
+Week 8 Progress:
+
+  Aaron:
+  
+    - Set up Plotly and the files needed to use it
+    - Created graphs for all the buy and sell transactions on the user's profile page
+    
+  Adrian:
+  
+    - 
+
+    
+  Ritam: 
+  
+    - 
+
+  
+  Akul: 
+  
+    - 
+
 Week 7 Progress:
 
   Aaron:
