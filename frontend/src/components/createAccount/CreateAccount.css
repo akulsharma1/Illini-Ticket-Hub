@@ -1,15 +1,13 @@
-/* Apply this CSS to disable scrolling */
 body {
   overflow: hidden;
 }
 
-/* Your existing CSS continues below */
 .create-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column; 
-  height: 650px;
+  height: 700px;
 }
 
 .top-header {
