@@ -24,53 +24,53 @@ const BuyPage: React.FC = () => {
   const [isBidModalOpen, setIsBidModalOpen] = useState(false); // State to control modal visibility
   const [isEditBidModalOpen, setIsEditBidModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async (eventId: number) => {
-      try {
-        const eventResponse = await fetch(
-          `http://localhost:5555/events/prices/${eventId}`
-        );
-        if (!eventResponse.ok) {
-          throw new Error("Failed to fetch event data");
-        }
-        const eventData = await eventResponse.json();
-        setEvent(eventData.event);
-        setLowestAsk(eventData.lowest_ask);
-        setHighestBid(eventData.highest_bid);
-
-        const topPricesResponse = await fetch(
-          `http://localhost:5555/events/prices/top/${eventId}`
-        );
-        if (!topPricesResponse.ok) {
-          throw new Error("Failed to fetch top prices");
-        }
-        const topPricesData = await topPricesResponse.json();
-        setTopPrices({
-          top_5_lowest_asks: topPricesData.top_5_lowest_asks,
-          top_5_highest_bids: topPricesData.top_5_highest_bids,
-        });
-
-        const userProfile = localStorage.getItem("userProfile");
-        if (!userProfile) {
-          console.error("User profile not found in local storage");
-          return;
-        }
-        const ownerId = JSON.parse(userProfile).account_id;
-
-        const bidResponse = await fetch(
-          `http://localhost:5555/account/userbid/${eventId}/${ownerId}`
-        );
-        if (!bidResponse.ok) {
-          throw new Error("Failed to fetch bid price");
-        }
-        const bidData = await bidResponse.json();
-        console.log(bidData);
-        setBidPrice(bidData.CurrentBid);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const fetchData = async (eventId: number) => {
+    try {
+      const eventResponse = await fetch(
+        `http://localhost:5555/events/prices/${eventId}`
+      );
+      if (!eventResponse.ok) {
+        throw new Error("Failed to fetch event data");
       }
-    };
+      const eventData = await eventResponse.json();
+      setEvent(eventData.event);
+      setLowestAsk(eventData.lowest_ask);
+      setHighestBid(eventData.highest_bid);
 
+      const topPricesResponse = await fetch(
+        `http://localhost:5555/events/prices/top/${eventId}`
+      );
+      if (!topPricesResponse.ok) {
+        throw new Error("Failed to fetch top prices");
+      }
+      const topPricesData = await topPricesResponse.json();
+      setTopPrices({
+        top_5_lowest_asks: topPricesData.top_5_lowest_asks,
+        top_5_highest_bids: topPricesData.top_5_highest_bids,
+      });
+
+      const userProfile = localStorage.getItem("userProfile");
+      if (!userProfile) {
+        console.error("User profile not found in local storage");
+        return;
+      }
+      const ownerId = JSON.parse(userProfile).account_id;
+
+      const bidResponse = await fetch(
+        `http://localhost:5555/account/userbid/${eventId}/${ownerId}`
+      );
+      if (!bidResponse.ok) {
+        throw new Error("Failed to fetch bid price");
+      }
+      const bidData = await bidResponse.json();
+      console.log(bidData);
+      setBidPrice(bidData.CurrentBid);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
     const storedEvent = localStorage.getItem("currEvent");
     if (storedEvent) {
       const storedEventData = JSON.parse(storedEvent);
@@ -188,7 +188,7 @@ const BuyPage: React.FC = () => {
 
       const responseData = await response.json();
       console.log("Bid placed successfully:", responseData);
-      alert("Your bid was successfully placed!");
+      fetchData(event!.event_id); // triggers re-render
     } catch (error) {
       console.error("Error creating bid:", error);
       alert("An error occurred while trying to place the bid.");
@@ -221,6 +221,7 @@ const BuyPage: React.FC = () => {
       const responseData = await response.json();
       console.log(responseData);
 
+      fetchData(event!.event_id); // triggers re-render
       setIsEditBidModalOpen(false); // Close modal on success
     } catch (error) {
       console.error("Error updating bid:", error);
@@ -260,6 +261,7 @@ const BuyPage: React.FC = () => {
       const responseData = await response.json();
       console.log("Bid removed:", responseData);
       setBidPrice(-1); // Reset bid price indicating no current bid
+      fetchData(event!.event_id); // triggers re-render
     } catch (error) {
       console.error("Error removing bid:", error);
     }
