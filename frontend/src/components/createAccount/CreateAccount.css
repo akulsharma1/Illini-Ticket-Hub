@@ -1,14 +1,13 @@
-body {
-  overflow: hidden;
-}
 
 .create-container {
+
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column; 
-  height: 700px;
+  height: 100vh;
 }
+
 
 .top-header {
   position: fixed; 
