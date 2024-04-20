@@ -294,13 +294,13 @@ eventRouter.get("/transactions/:event_id", async (req: Request, res: Response, n
 
     const transactions = await prisma.transaction.findMany({
         where: {
-            event_id: Number(eventIdStr)
+            event_id: Number(eventIdStr),
         },
         select: {
             created_at: true,
             price: true,
-        }
-    })
-})
+        },
+    });
+});
 
 export default eventRouter;

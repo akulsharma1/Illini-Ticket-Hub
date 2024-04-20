@@ -181,7 +181,9 @@ bidRouter.post("/delete", async (req: Request, res: Response, next: NextFunction
             },
         })
         .catch((error) => {
-            return next(new RouterError(StatusCode.ClientErrorPreconditionFailed, "error deleting bid", undefined, error.message));
+            return next(
+                new RouterError(StatusCode.ClientErrorPreconditionFailed, "error deleting bid", undefined, error.message),
+            );
         });
 
     if (!updatedBid) {
@@ -191,7 +193,7 @@ bidRouter.post("/delete", async (req: Request, res: Response, next: NextFunction
     // Send a success message
     return res.status(StatusCode.SuccessOK).json({
         success: true,
-        message: "Bid successfully deleted"
+        message: "Bid successfully deleted",
     });
 });
 
