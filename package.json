@@ -4,5 +4,10 @@
   "description": "package.json to manage frontend and backend. check backend/package.json and frontend/package.json to get frontend/backend specific data.",
   "repository": "https://github.com/CS222-UIUC-SP24/group-project-team-18.git",
   "author": "Akul Sharma <akulsharma02@gmail.com>",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "plotly.js": "^2.31.1",
+    "plotly.js-dist": "^2.31.1",
+    "react-plotly.js": "^2.6.0"
+  }
 }

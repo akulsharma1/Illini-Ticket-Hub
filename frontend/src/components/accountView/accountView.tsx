@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./accountView.css";
 import { Link } from "react-router-dom";
+import Plot from 'react-plotly.js';
 
 interface Account {
   account_id: string;
@@ -8,10 +9,17 @@ interface Account {
   name: string;
   // Add more fields as needed in future
 }
+
+interface Transaction {
+  id: number;
+  created: Date;
+  price: number;
+}
+
 const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
   const [numBids, setNumBids] = useState<number>(0);
   const [numAsks, setNumAsks] = useState<number>(0);
-  console.log(account);
+  // console.log(account);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,12 +90,105 @@ const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
   );
 };
 
+const TransactionGraphs: React.FC<{ account: Account | null }> = ({ account }) => {
+  const [sellTransactions, setSellTransactions] = useState<Transaction[]>([]);
+  const [buyTransactions, setBuyTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (account) {
+        try {
+          const transactionResponse = await fetch(
+            "http://localhost:5555/account/transactions?id=" + account.account_id
+          );
+          if (transactionResponse.ok) {
+            const transactionData = await transactionResponse.json();
+            const sellTransactions: Transaction[] = transactionData.selling_transactions.map((transactionData: any) => ({
+              id: transactionData.seller_id,
+              created: transactionData.created_at,
+              price: transactionData.price,
+            }));
+            const buyTransactions: Transaction[] = transactionData.buying_transactions.map((transactionData: any) => ({
+              id: transactionData.buyer_id,
+              created: transactionData.created_at,
+              price: transactionData.price,
+            }));
+            setSellTransactions(sellTransactions);
+            setBuyTransactions(buyTransactions);
+          } else {
+            throw new Error("Failed to fetch bid data");
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+    fetchData();
+  }, [account]);
+
+  if (!account) {
+    return <p></p>;
+  }
+
+  return (
+     <div>
+      <Plot
+      data={[
+        {
+          x: sellTransactions.map(transaction => transaction.created),
+          y: sellTransactions.map(transaction => transaction.price),
+          mode: "markers",
+          type: "scatter",
+          marker: {
+            size: 12,
+          }
+        },
+      ]}
+      layout={{
+        title: "Sell Transactions",
+        xaxis: {
+          title: "Time",
+        },
+        yaxis: {
+          title: "Price",
+        },
+      }}
+    />
+    <Plot
+      data={[
+        {
+          x: buyTransactions.map(transaction => transaction.created),
+          y: buyTransactions.map(transaction => transaction.price),
+          mode: "markers",
+          type: "scatter",
+          marker: {
+            size: 12,
+          }
+        },
+      ]}
+      layout={{
+        title: "Buy Transactions",
+        xaxis: {
+          title: "Time",
+        },
+        yaxis: {
+          title: "Price",
+        },
+      }}
+    />
+  </div>
+  
+  )
+
+
+}
+
 
 const AccountView: React.FC = () => {
   const [account, setAccount] = useState<Account | null>(null);
   let profile: Account;
   const st = localStorage.getItem("userProfile");
-  console.log("st: ", st);
+  // console.log("st: ", st);
 
   if (!st) {
     throw new Error("feafaeio");
@@ -112,7 +213,7 @@ const AccountView: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         const profileData: Account = data.profile;
         setAccount(profileData); // store the pulled data
       } catch (error) {
@@ -135,7 +236,16 @@ const AccountView: React.FC = () => {
     // (we have account-view inside a card, so its styling is irrelevant)
   );
 
-  return <>{renderAccountDetails()}</>;
+  const renderTransactionGraphs = () => (
+    <div className="transaction-card">
+       <div className="transaction-graphs">
+          <TransactionGraphs account={account} />
+       </div>
+
+    </div>
+  )
+
+  return <>{renderAccountDetails()} {renderTransactionGraphs()}</>;
 };
 
 export default AccountView;
