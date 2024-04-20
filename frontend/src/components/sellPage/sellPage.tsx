@@ -25,53 +25,53 @@ const SellPage: React.FC = () => {
   const [isAskModalOpen, setIsAskModalOpen] = useState(false); // State to control modal visibility
   const [isEditAskModalOpen, setIsEditAskModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async (eventId: number) => {
-      try {
-        const response = await fetch(
-          `http://localhost:5555/events/prices/${eventId}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch event data");
-        }
-        const eventData = await response.json();
-
-        setEvent(eventData.event);
-        setLowestAsk(eventData.lowest_ask);
-        setHighestBid(eventData.highest_bid);
-        const topPricesResponse = await fetch(
-          `http://localhost:5555/events/prices/top/${eventId}`
-        );
-        if (!topPricesResponse.ok) {
-          throw new Error("Failed to fetch top prices");
-        }
-        const topPricesData = await topPricesResponse.json();
-        setTopPrices({
-          top_5_lowest_asks: topPricesData.top_5_lowest_asks,
-          top_5_highest_bids: topPricesData.top_5_highest_bids,
-        });
-
-        const userProfile = localStorage.getItem("userProfile");
-        if (!userProfile) {
-          console.error("User profile not found in local storage");
-          return;
-        }
-        const ownerId = JSON.parse(userProfile).account_id;
-
-        const askResponse = await fetch(
-          `http://localhost:5555/account/userask/${eventId}/${ownerId}`
-        );
-        if (!askResponse.ok) {
-          throw new Error("Failed to fetch ask price");
-        }
-        const askData = await askResponse.json();
-        console.log(askData);
-        setAskPrice(askData.CurrentAsk);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const fetchData = async (eventId: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5555/events/prices/${eventId}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch event data");
       }
-    };
+      const eventData = await response.json();
 
+      setEvent(eventData.event);
+      setLowestAsk(eventData.lowest_ask);
+      setHighestBid(eventData.highest_bid);
+      const topPricesResponse = await fetch(
+        `http://localhost:5555/events/prices/top/${eventId}`
+      );
+      if (!topPricesResponse.ok) {
+        throw new Error("Failed to fetch top prices");
+      }
+      const topPricesData = await topPricesResponse.json();
+      setTopPrices({
+        top_5_lowest_asks: topPricesData.top_5_lowest_asks,
+        top_5_highest_bids: topPricesData.top_5_highest_bids,
+      });
+
+      const userProfile = localStorage.getItem("userProfile");
+      if (!userProfile) {
+        console.error("User profile not found in local storage");
+        return;
+      }
+      const ownerId = JSON.parse(userProfile).account_id;
+
+      const askResponse = await fetch(
+        `http://localhost:5555/account/userask/${eventId}/${ownerId}`
+      );
+      if (!askResponse.ok) {
+        throw new Error("Failed to fetch ask price");
+      }
+      const askData = await askResponse.json();
+      console.log(askData);
+      setAskPrice(askData.CurrentAsk);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
     const storedEvent = localStorage.getItem("currEvent");
     if (storedEvent) {
       const storedEventData = JSON.parse(storedEvent);
@@ -128,7 +128,7 @@ const SellPage: React.FC = () => {
       }
       const responseData = await response.json();
       console.log(responseData);
-      alert("The ticket was successfully sold!");
+      fetchData(event!.event_id); // triggers re-render
     } catch (error) {
       console.error("Error creating ask:", error);
       alert("An error occurred while trying to sell the ticket.");
@@ -187,7 +187,7 @@ const SellPage: React.FC = () => {
       }
       const responseData = await response.json();
       console.log(responseData);
-      alert("Your ask was successfully placed!");
+      fetchData(event!.event_id); // triggers re-render
     } catch (error) {
       console.error("Error creating ask:", error);
       alert("An error occurred while trying to place the ask.");
@@ -221,6 +221,7 @@ const SellPage: React.FC = () => {
       const responseData = await response.json();
       console.log(responseData);
 
+      fetchData(event!.event_id); // triggers re-render
       setIsEditAskModalOpen(false); // Close modal on success
     } catch (error) {
       console.error("Error updating ask:", error);
@@ -260,6 +261,7 @@ const SellPage: React.FC = () => {
       const responseData = await response.json();
       console.log("Ask removed:", responseData);
       setAskPrice(-1); // Reset ask price indicating no current ask
+      fetchData(event!.event_id); // triggers re-render
     } catch (error) {
       console.error("Error removing ask:", error);
     }

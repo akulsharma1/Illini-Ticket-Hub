@@ -187,7 +187,6 @@ const BuyPage: React.FC = () => {
       }
 
       const responseData = await response.json();
-      console.log("Bid placed successfully:", responseData);
       fetchData(event!.event_id); // triggers re-render
     } catch (error) {
       console.error("Error creating bid:", error);
