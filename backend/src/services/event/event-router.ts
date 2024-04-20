@@ -301,6 +301,8 @@ eventRouter.get("/transactions/:event_id", async (req: Request, res: Response, n
             price: true,
         },
     });
+
+    return res.status(200).json({success: true, message: "found transactions", transactions: transactions});
 });
 
 export default eventRouter;
