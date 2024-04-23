@@ -157,7 +157,7 @@ eventRouter.get("/prices/:event_id", async (req: Request, res: Response, next: N
 });
 
 eventRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
-    let event: Event = req.body as Event;
+    const event: Event = req.body as Event;
 
     if (!isValidEventFormat(event)) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
@@ -302,7 +302,7 @@ eventRouter.get("/transactions/:event_id", async (req: Request, res: Response, n
         },
     });
 
-    return res.status(200).json({success: true, message: "found transactions", transactions: transactions});
+    return res.status(200).json({ success: true, message: "found transactions", transactions: transactions });
 });
 
 export default eventRouter;
