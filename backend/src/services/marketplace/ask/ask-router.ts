@@ -89,10 +89,11 @@ askRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) 
 });
 
 askRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
+    const price: number = req.body.price;
     const ask: Ask = req.body as Ask;
 
     // TODO: change to new ask format checker
-    if (!isValidAskFormat(ask)) {
+    if (!isValidAskFormat(ask, price)) {
         return next(new RouterError(StatusCode.ClientErrorBadRequest, "invalid body parameters"));
     }
 
