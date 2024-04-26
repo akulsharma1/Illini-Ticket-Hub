@@ -314,13 +314,18 @@ const BuyPage: React.FC = () => {
           </div>
           <div className="button-container">
             <button
-              className={`buy-button ${bidPrice != -1 ? "disabled" : ""}`} // @TODO: add another check here for if the user owns ticket
+              className={`buy-button ${
+                bidPrice != -1 || lowestAsk == -1 ? "disabled" : ""
+              }`}
               onClick={handleBuyLowest}
+              disabled={bidPrice !== -1 || lowestAsk === -1} // This actually disables the button
             >
               Buy Now
               <br />
-              Lowest Ask: {lowestAsk}
+              Lowest Ask:{" "}
+              {lowestAsk !== -1 ? `$${lowestAsk.toFixed(2)}` : "N/A"}
             </button>
+
             {bidPrice === -1 ? (
               <button
                 className="bid-button"
