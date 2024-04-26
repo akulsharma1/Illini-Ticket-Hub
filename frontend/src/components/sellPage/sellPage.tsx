@@ -315,8 +315,11 @@ const SellPage: React.FC = () => {
           </div>
           <div className="button-container">
             <button
-              className={`sell-button ${askPrice != -1 ? "disabled" : ""}`} // @TODO: add another check here for if the user owns ticket
+              className={`sell-button ${
+                askPrice != -1 || highestBid == -1 ? "disabled" : ""
+              }`} // @TODO: add another check here for if the user owns ticket
               onClick={handleSellHighest}
+              disabled={askPrice !== -1 || highestBid === -1}
             >
               Sell Now
               <br />
