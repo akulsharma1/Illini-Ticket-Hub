@@ -84,7 +84,7 @@ const AccountDetails: React.FC<{ account: Account | null }> = ({ account }) => {
         <strong>Number of Active Asks:</strong> {numAsks}
       </p>
       <p>
-        <strong>Account Creation Date:</strong> 3/24/22
+        {/* <strong>Account Creation Date:</strong> 3/24/22 */}
       </p>
     </div>
   );
