@@ -123,8 +123,8 @@ const BuyPage: React.FC = () => {
         return;
       }
       const responseData = await response.json();
+      fetchData(event!.event_id);
       console.log(responseData);
-      alert("The ticket was successfully purchased!");
     } catch (error) {
       console.error("Error creating bid:", error);
       alert("An error occurred while trying to buy the ticket.");
