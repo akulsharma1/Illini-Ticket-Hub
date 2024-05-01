@@ -1,3 +1,5 @@
+// NOTE: it is not a good idea to store RSA private keys in a non .gitignored file. however, for opensource/testing purposes we have stored it here
+
 export const rsaPrivateKey = `-----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgHDhoEX/QSYu+q4i/0qD6ZRYiagXskwOEiv5um6vEPd6NfsedvS2
 hHVlR3ChYT6ttl4+/KUkTZ5Qh4ATtSUWhecZqNaS3L4D3KFx+8bI/fgynewjhaPw
