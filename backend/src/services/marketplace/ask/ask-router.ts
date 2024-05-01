@@ -83,6 +83,7 @@ askRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) 
                 .status(StatusCode.SuccessCreated)
                 .json({ success: true, message: "transferred ticket to new owner. new ownerid: " + highestBid.owner_id });
         })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .catch((reason: any) => {
             return next(new RouterError(StatusCode.ClientErrorBadRequest, "error executing sale, ask placed", undefined, reason));
         });
@@ -161,6 +162,7 @@ askRouter.post("/create", async (req: Request, res: Response, next: NextFunction
                 .status(StatusCode.SuccessCreated)
                 .json({ success: true, message: "transferred ticket to new owner. new ownerid: " + highestBid.owner_id });
         })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .catch((reason: any) => {
             return next(new RouterError(StatusCode.ClientErrorBadRequest, "error executing sale, ask placed", undefined, reason));
         });

@@ -86,6 +86,7 @@ bidRouter.post("/edit", async (req: Request, res: Response, next: NextFunction) 
                 .status(StatusCode.SuccessCreated)
                 .json({ success: true, message: "transferred ticket to new owner. new ownerid: " + updatedBid.owner_id });
         })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .catch((reason: any) => {
             return next(new RouterError(StatusCode.ServerErrorInternal, "error executing sale, bid placed", undefined, reason));
         });
@@ -143,6 +144,7 @@ bidRouter.post("/create", async (req: Request, res: Response, next: NextFunction
                 .status(StatusCode.SuccessCreated)
                 .json({ success: true, message: "transferred ticket to new owner. new ownerid: " + resp.owner_id });
         })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .catch((reason: any) => {
             return next(new RouterError(StatusCode.ServerErrorInternal, "error executing sale, bid placed", undefined, reason));
         });
