@@ -1,4 +1,4 @@
-name: Format Check
+name: Build
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - 'backend/**'
 
 jobs:
-  check-format:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # You can specify the Node.js version you need
+        node-version: '21'  # Adjust as necessary to match your project requirements
 
     - name: Install Yarn
       run: npm install -g yarn
@@ -28,6 +28,6 @@ jobs:
       run: yarn install
       working-directory: backend
 
-    - name: Check formatting
-      run: yarn format:check
+    - name: Build project
+      run: yarn build
       working-directory: backend
