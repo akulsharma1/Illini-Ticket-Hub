@@ -1,0 +1,33 @@
+name: Format Check
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+  pull_request:
+    paths:
+      - 'backend/**'
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # You can specify the Node.js version you need
+
+    - name: Install Yarn
+      run: npm install -g yarn
+
+    - name: Install dependencies
+      run: yarn install
+      working-directory: backend
+
+    - name: Check formatting
+      run: yarn format:check
+      working-directory: backend
