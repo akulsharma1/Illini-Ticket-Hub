@@ -12,7 +12,8 @@ Illini Ticket Hub was created to solve a major issue at UIUC: there is no effect
 
 ### Tech Stack
 - Backend: TypeScript/Node.JS, PostgreSQL (Prisma ORM), Express.JS, Microsoft Azure (for cloud deployment).
-- Frontend: TypeScript/Node.JS, React.JS, HTML/CSS
+- Frontend: TypeScript/Node.JS, React.JS, HTML/CSS, Plotly.JS
+- General: Github Actions/Azure for CI/CD pipeline.
 
 ### Setup
 - View `backend/readme.md` and `frontend/readme.md` in order to set up all the code
