@@ -1,4 +1,4 @@
-name: Build
+name: Code Quality Check
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - 'backend/**'
 
 jobs:
-  build:
+  quality-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +28,10 @@ jobs:
       run: yarn install
       working-directory: backend
 
-    - name: Build project
-      run: yarn build
+    - name: Check formatting
+      run: yarn format:check
+      working-directory: backend
+
+    - name: Check linting
+      run: yarn lint:check
       working-directory: backend
