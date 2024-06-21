@@ -15,7 +15,3 @@ Ticket API repository.
 ```
 yarn start
 ```
-
-Front end mockup:
-
-[tmb analytics front end.pdf](https://github.com/tmb-analytics/ticket-api/files/14381547/tmb.analytics.front.end.pdf)
